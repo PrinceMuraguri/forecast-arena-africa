@@ -116,10 +116,12 @@ export function PartnerBar({
         )}
       >
         <span className="font-display font-semibold">Forecast Arena</span>
-        <Dot /> <span>Powered by Econsult Africa</span>
+        <Dot />
+        <span className="inline-flex items-center gap-1.5"><EconsultMark />Powered by Econsult Africa</span>
         {showTkws && (
           <>
-            <Dot /> <span>Official Media Partner The Kenyan Wall Street</span>
+            <Dot />
+            <span className="inline-flex items-center gap-1.5"><TkwsMark />Official Media Partner The Kenyan Wall Street</span>
           </>
         )}
         {sponsorName && (
