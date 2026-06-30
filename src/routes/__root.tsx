@@ -10,7 +10,6 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import ogImage from "../assets/og-image.jpg";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AuthProvider } from "../lib/auth-stub";
 
@@ -79,33 +78,27 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Forecast Arena — Africa's Polls & Predictions Platform" },
+      { title: "Forecast Arena — Paid Polls & Predictions" },
       {
         name: "description",
         content:
           "Share what you think. Predict what's next. Get paid for both. Powered by Econsult Africa.",
       },
       { name: "author", content: "Forecast Arena" },
-      { property: "og:title", content: "Forecast Arena — Africa's Polls & Predictions Platform" },
+      { property: "og:title", content: "Forecast Arena — Paid Polls & Predictions" },
       {
         property: "og:description",
         content:
           "Take surveys, get paid. Predict outcomes, earn when you're right. Powered by Econsult Africa.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:site_name", content: "Forecast Arena" },
-      { property: "og:image", content: ogImage },
-      { property: "og:image:width", content: "1200" },
-      { property: "og:image:height", content: "630" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Forecast Arena — Africa's Polls & Predictions Platform" },
-      {
-        name: "twitter:description",
-        content:
-          "Take surveys, get paid. Predict outcomes, earn when you're right. Powered by Econsult Africa.",
-      },
-      { name: "twitter:image", content: ogImage },
-      { name: "theme-color", content: "#0C1024" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Forecast Arena — Paid Polls & Predictions" },
+      { name: "description", content: "Turn your opinions into earnings. Get paid to take surveys and make predictions on the topics shaping the real world—prices, elections, markets, brands & more." },
+      { property: "og:description", content: "Turn your opinions into earnings. Get paid to take surveys and make predictions on the topics shaping the real world—prices, elections, markets, brands & more." },
+      { name: "twitter:description", content: "Turn your opinions into earnings. Get paid to take surveys and make predictions on the topics shaping the real world—prices, elections, markets, brands & more." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/ed6cf7ca-dd52-4006-97d5-2116b1450028" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/ed6cf7ca-dd52-4006-97d5-2116b1450028" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
