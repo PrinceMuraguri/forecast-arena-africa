@@ -21,6 +21,7 @@ import { Route as ArenaRouteImport } from './routes/arena'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as InsightsSlugRouteImport } from './routes/insights.$slug'
 import { Route as ArenaSlugRouteImport } from './routes/arena.$slug'
 import { Route as AuthenticatedWalletRouteImport } from './routes/_authenticated/wallet'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
@@ -84,6 +85,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InsightsSlugRoute = InsightsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => InsightsRoute,
+} as any)
 const ArenaSlugRoute = ArenaSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -107,7 +113,7 @@ export interface FileRoutesByFullPath {
   '/for-sponsors': typeof ForSponsorsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/how-it-works': typeof HowItWorksRoute
-  '/insights': typeof InsightsRoute
+  '/insights': typeof InsightsRouteWithChildren
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRoute
@@ -115,6 +121,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/wallet': typeof AuthenticatedWalletRoute
   '/arena/$slug': typeof ArenaSlugRoute
+  '/insights/$slug': typeof InsightsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -123,7 +130,7 @@ export interface FileRoutesByTo {
   '/for-sponsors': typeof ForSponsorsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/how-it-works': typeof HowItWorksRoute
-  '/insights': typeof InsightsRoute
+  '/insights': typeof InsightsRouteWithChildren
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRoute
@@ -131,6 +138,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/wallet': typeof AuthenticatedWalletRoute
   '/arena/$slug': typeof ArenaSlugRoute
+  '/insights/$slug': typeof InsightsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -141,7 +149,7 @@ export interface FileRoutesById {
   '/for-sponsors': typeof ForSponsorsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/how-it-works': typeof HowItWorksRoute
-  '/insights': typeof InsightsRoute
+  '/insights': typeof InsightsRouteWithChildren
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRoute
@@ -149,6 +157,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/wallet': typeof AuthenticatedWalletRoute
   '/arena/$slug': typeof ArenaSlugRoute
+  '/insights/$slug': typeof InsightsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -167,6 +176,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/wallet'
     | '/arena/$slug'
+    | '/insights/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -183,6 +193,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/wallet'
     | '/arena/$slug'
+    | '/insights/$slug'
   id:
     | '__root__'
     | '/'
@@ -200,6 +211,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/wallet'
     | '/arena/$slug'
+    | '/insights/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -210,7 +222,7 @@ export interface RootRouteChildren {
   ForSponsorsRoute: typeof ForSponsorsRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   HowItWorksRoute: typeof HowItWorksRoute
-  InsightsRoute: typeof InsightsRoute
+  InsightsRoute: typeof InsightsRouteWithChildren
   LoginRoute: typeof LoginRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   RewardsRoute: typeof RewardsRoute
@@ -303,6 +315,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/insights/$slug': {
+      id: '/insights/$slug'
+      path: '/$slug'
+      fullPath: '/insights/$slug'
+      preLoaderRoute: typeof InsightsSlugRouteImport
+      parentRoute: typeof InsightsRoute
+    }
     '/arena/$slug': {
       id: '/arena/$slug'
       path: '/$slug'
@@ -350,6 +369,18 @@ const ArenaRouteChildren: ArenaRouteChildren = {
 
 const ArenaRouteWithChildren = ArenaRoute._addFileChildren(ArenaRouteChildren)
 
+interface InsightsRouteChildren {
+  InsightsSlugRoute: typeof InsightsSlugRoute
+}
+
+const InsightsRouteChildren: InsightsRouteChildren = {
+  InsightsSlugRoute: InsightsSlugRoute,
+}
+
+const InsightsRouteWithChildren = InsightsRoute._addFileChildren(
+  InsightsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
@@ -358,7 +389,7 @@ const rootRouteChildren: RootRouteChildren = {
   ForSponsorsRoute: ForSponsorsRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   HowItWorksRoute: HowItWorksRoute,
-  InsightsRoute: InsightsRoute,
+  InsightsRoute: InsightsRouteWithChildren,
   LoginRoute: LoginRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   RewardsRoute: RewardsRoute,
