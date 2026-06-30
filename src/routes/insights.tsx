@@ -100,25 +100,31 @@ function InsightsPage() {
         ) : (
           <ul className="mt-8 grid gap-4 md:grid-cols-2">
             {filtered.map((poll) => (
-              <li
-                key={poll.id}
-                className="rounded-2xl border border-foreground/10 bg-white/70 p-6 transition-colors hover:border-arena-coral/60"
-              >
-                <p className="text-[10px] uppercase tracking-widest text-muted-foreground">
-                  {poll.category?.name ?? "Poll"}
-                  {poll.sponsor_name ? ` · ${poll.sponsor_name}` : ""}
-                </p>
-                <h3 className="mt-2 font-display text-lg font-semibold leading-snug">
-                  {poll.title}
-                </h3>
-                {poll.summary ? (
-                  <p className="mt-2 text-sm text-muted-foreground">{poll.summary}</p>
-                ) : null}
-                {poll.closes_at ? (
-                  <p className="mt-4 text-xs font-mono uppercase tracking-widest text-arena-coral">
-                    Closes {new Date(poll.closes_at).toLocaleDateString()}
+              <li key={poll.id}>
+                <Link
+                  to="/insights/$slug"
+                  params={{ slug: poll.slug }}
+                  className="block rounded-2xl border border-foreground/10 bg-white/70 p-6 transition-colors hover:border-arena-coral/60"
+                >
+                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                    {poll.category?.name ?? "Poll"}
+                    {poll.sponsor_name ? ` · ${poll.sponsor_name}` : ""}
                   </p>
-                ) : null}
+                  <h3 className="mt-2 font-display text-lg font-semibold leading-snug">
+                    {poll.title}
+                  </h3>
+                  {poll.summary ? (
+                    <p className="mt-2 text-sm text-muted-foreground">{poll.summary}</p>
+                  ) : null}
+                  <div className="mt-4 flex items-center justify-between text-xs uppercase tracking-widest">
+                    <span className="text-arena-coral">Take poll →</span>
+                    {poll.closes_at ? (
+                      <span className="font-mono text-muted-foreground">
+                        Closes {new Date(poll.closes_at).toLocaleDateString()}
+                      </span>
+                    ) : null}
+                  </div>
+                </Link>
               </li>
             ))}
           </ul>
