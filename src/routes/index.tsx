@@ -169,7 +169,7 @@ function Index() {
           </div>
         </div>
 
-        <LiveTicker items={TICKER} />
+        <LiveTicker items={liveItems} />
       </section>
 
       {/* PARTNER BAR */}
