@@ -90,7 +90,7 @@ function PollDetailPage() {
         ) : null}
 
         <div className="mt-6">
-          <PartnerBar variant="cobranded" sponsor={poll.sponsor_name ?? undefined} />
+          <PartnerBar variant="cobranded" sponsorName={poll.sponsor_name ?? undefined} />
         </div>
 
         {/* CTAs */}
