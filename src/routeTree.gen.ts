@@ -21,6 +21,7 @@ import { Route as ArenaRouteImport } from './routes/arena'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ArenaSlugRouteImport } from './routes/arena.$slug'
 import { Route as AuthenticatedWalletRouteImport } from './routes/_authenticated/wallet'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 
@@ -83,6 +84,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ArenaSlugRoute = ArenaSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ArenaRoute,
+} as any)
 const AuthenticatedWalletRoute = AuthenticatedWalletRouteImport.update({
   id: '/wallet',
   path: '/wallet',
@@ -97,7 +103,7 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/arena': typeof ArenaRoute
+  '/arena': typeof ArenaRouteWithChildren
   '/for-sponsors': typeof ForSponsorsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/how-it-works': typeof HowItWorksRoute
@@ -108,11 +114,12 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/wallet': typeof AuthenticatedWalletRoute
+  '/arena/$slug': typeof ArenaSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/arena': typeof ArenaRoute
+  '/arena': typeof ArenaRouteWithChildren
   '/for-sponsors': typeof ForSponsorsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/how-it-works': typeof HowItWorksRoute
@@ -123,13 +130,14 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/wallet': typeof AuthenticatedWalletRoute
+  '/arena/$slug': typeof ArenaSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
-  '/arena': typeof ArenaRoute
+  '/arena': typeof ArenaRouteWithChildren
   '/for-sponsors': typeof ForSponsorsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/how-it-works': typeof HowItWorksRoute
@@ -140,6 +148,7 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/wallet': typeof AuthenticatedWalletRoute
+  '/arena/$slug': typeof ArenaSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -157,6 +166,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/dashboard'
     | '/wallet'
+    | '/arena/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -172,6 +182,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/dashboard'
     | '/wallet'
+    | '/arena/$slug'
   id:
     | '__root__'
     | '/'
@@ -188,13 +199,14 @@ export interface FileRouteTypes {
     | '/signup'
     | '/_authenticated/dashboard'
     | '/_authenticated/wallet'
+    | '/arena/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
-  ArenaRoute: typeof ArenaRoute
+  ArenaRoute: typeof ArenaRouteWithChildren
   ForSponsorsRoute: typeof ForSponsorsRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   HowItWorksRoute: typeof HowItWorksRoute
@@ -291,6 +303,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/arena/$slug': {
+      id: '/arena/$slug'
+      path: '/$slug'
+      fullPath: '/arena/$slug'
+      preLoaderRoute: typeof ArenaSlugRouteImport
+      parentRoute: typeof ArenaRoute
+    }
     '/_authenticated/wallet': {
       id: '/_authenticated/wallet'
       path: '/wallet'
@@ -321,11 +340,21 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface ArenaRouteChildren {
+  ArenaSlugRoute: typeof ArenaSlugRoute
+}
+
+const ArenaRouteChildren: ArenaRouteChildren = {
+  ArenaSlugRoute: ArenaSlugRoute,
+}
+
+const ArenaRouteWithChildren = ArenaRoute._addFileChildren(ArenaRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
-  ArenaRoute: ArenaRoute,
+  ArenaRoute: ArenaRouteWithChildren,
   ForSponsorsRoute: ForSponsorsRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   HowItWorksRoute: HowItWorksRoute,
