@@ -111,3 +111,33 @@ export const listCategories = createServerFn({ method: "GET" }).handler(
     return (data ?? []) as ArenaCategory[];
   },
 );
+
+export const getMarketBySlug = createServerFn({ method: "GET" })
+  .inputValidator((input: { slug: string }) => {
+    if (!input?.slug || typeof input.slug !== "string") {
+      throw new Error("slug is required");
+    }
+    return { slug: input.slug };
+  })
+  .handler(async ({ data }): Promise<ArenaMarket | null> => {
+    const sb = publicClient();
+    const { data: row, error } = await sb
+      .from("markets")
+      .select(
+        `id, slug, title, summary, question, status, opens_at, closes_at, resolves_at,
+         sponsor_name, prize_pool_kes,
+         category:categories(slug,name,color),
+         outcomes:market_outcomes(id,label,implied_probability,sort_order)`,
+      )
+      .eq("slug", data.slug)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    if (!row) return null;
+    return {
+      ...row,
+      prize_pool_kes: Number(row.prize_pool_kes ?? 0),
+      outcomes: (row.outcomes ?? [])
+        .map((o) => ({ ...o, implied_probability: Number(o.implied_probability ?? 0) }))
+        .sort((a, b) => a.sort_order - b.sort_order),
+    } as ArenaMarket;
+  });
