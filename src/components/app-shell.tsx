@@ -52,6 +52,11 @@ export function AppShell({ children }: { children: ReactNode }) {
                 <Shield className="h-3.5 w-3.5" /> Admin
               </Link>
             )}
+            {hasSponsorOrg && (
+              <Link to="/sponsor" className="inline-flex items-center gap-1 text-live-cyan hover:text-live-cyan/80">
+                <Building2 className="h-3.5 w-3.5" /> Sponsor
+              </Link>
+            )}
           </nav>
 
           <div className="flex items-center gap-2">
