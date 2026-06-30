@@ -14,7 +14,9 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as RewardsRouteImport } from './routes/rewards'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as RankingsRouteImport } from './routes/rankings'
+import { Route as PodcastRouteImport } from './routes/podcast'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as InsightsRouteImport } from './routes/insights'
 import { Route as IndexesRouteImport } from './routes/indexes'
@@ -27,8 +29,10 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TakeSlugRouteImport } from './routes/take.$slug'
+import { Route as ReportsSlugRouteImport } from './routes/reports.$slug'
 import { Route as RankingsSlugRouteImport } from './routes/rankings.$slug'
 import { Route as PollsSlugRouteImport } from './routes/polls.$slug'
+import { Route as PodcastSlugRouteImport } from './routes/podcast.$slug'
 import { Route as InsightsSlugRouteImport } from './routes/insights.$slug'
 import { Route as IndexesSlugRouteImport } from './routes/indexes.$slug'
 import { Route as ArenaSlugRouteImport } from './routes/arena.$slug'
@@ -62,9 +66,19 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReportsRoute = ReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RankingsRoute = RankingsRouteImport.update({
   id: '/rankings',
   path: '/rankings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PodcastRoute = PodcastRouteImport.update({
+  id: '/podcast',
+  path: '/podcast',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -126,6 +140,11 @@ const TakeSlugRoute = TakeSlugRouteImport.update({
   path: '/take/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReportsSlugRoute = ReportsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ReportsRoute,
+} as any)
 const RankingsSlugRoute = RankingsSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -135,6 +154,11 @@ const PollsSlugRoute = PollsSlugRouteImport.update({
   id: '/polls/$slug',
   path: '/polls/$slug',
   getParentRoute: () => rootRouteImport,
+} as any)
+const PodcastSlugRoute = PodcastSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => PodcastRoute,
 } as any)
 const InsightsSlugRoute = InsightsSlugRouteImport.update({
   id: '/$slug',
@@ -183,7 +207,9 @@ export interface FileRoutesByFullPath {
   '/indexes': typeof IndexesRouteWithChildren
   '/insights': typeof InsightsRouteWithChildren
   '/login': typeof LoginRoute
+  '/podcast': typeof PodcastRouteWithChildren
   '/rankings': typeof RankingsRouteWithChildren
+  '/reports': typeof ReportsRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRoute
   '/robots.txt': typeof RobotsDottxtRoute
@@ -196,8 +222,10 @@ export interface FileRoutesByFullPath {
   '/arena/$slug': typeof ArenaSlugRoute
   '/indexes/$slug': typeof IndexesSlugRoute
   '/insights/$slug': typeof InsightsSlugRoute
+  '/podcast/$slug': typeof PodcastSlugRoute
   '/polls/$slug': typeof PollsSlugRoute
   '/rankings/$slug': typeof RankingsSlugRoute
+  '/reports/$slug': typeof ReportsSlugRoute
   '/take/$slug': typeof TakeSlugRoute
 }
 export interface FileRoutesByTo {
@@ -211,7 +239,9 @@ export interface FileRoutesByTo {
   '/indexes': typeof IndexesRouteWithChildren
   '/insights': typeof InsightsRouteWithChildren
   '/login': typeof LoginRoute
+  '/podcast': typeof PodcastRouteWithChildren
   '/rankings': typeof RankingsRouteWithChildren
+  '/reports': typeof ReportsRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRoute
   '/robots.txt': typeof RobotsDottxtRoute
@@ -224,8 +254,10 @@ export interface FileRoutesByTo {
   '/arena/$slug': typeof ArenaSlugRoute
   '/indexes/$slug': typeof IndexesSlugRoute
   '/insights/$slug': typeof InsightsSlugRoute
+  '/podcast/$slug': typeof PodcastSlugRoute
   '/polls/$slug': typeof PollsSlugRoute
   '/rankings/$slug': typeof RankingsSlugRoute
+  '/reports/$slug': typeof ReportsSlugRoute
   '/take/$slug': typeof TakeSlugRoute
 }
 export interface FileRoutesById {
@@ -241,7 +273,9 @@ export interface FileRoutesById {
   '/indexes': typeof IndexesRouteWithChildren
   '/insights': typeof InsightsRouteWithChildren
   '/login': typeof LoginRoute
+  '/podcast': typeof PodcastRouteWithChildren
   '/rankings': typeof RankingsRouteWithChildren
+  '/reports': typeof ReportsRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRoute
   '/robots.txt': typeof RobotsDottxtRoute
@@ -254,8 +288,10 @@ export interface FileRoutesById {
   '/arena/$slug': typeof ArenaSlugRoute
   '/indexes/$slug': typeof IndexesSlugRoute
   '/insights/$slug': typeof InsightsSlugRoute
+  '/podcast/$slug': typeof PodcastSlugRoute
   '/polls/$slug': typeof PollsSlugRoute
   '/rankings/$slug': typeof RankingsSlugRoute
+  '/reports/$slug': typeof ReportsSlugRoute
   '/take/$slug': typeof TakeSlugRoute
 }
 export interface FileRouteTypes {
@@ -271,7 +307,9 @@ export interface FileRouteTypes {
     | '/indexes'
     | '/insights'
     | '/login'
+    | '/podcast'
     | '/rankings'
+    | '/reports'
     | '/reset-password'
     | '/rewards'
     | '/robots.txt'
@@ -284,8 +322,10 @@ export interface FileRouteTypes {
     | '/arena/$slug'
     | '/indexes/$slug'
     | '/insights/$slug'
+    | '/podcast/$slug'
     | '/polls/$slug'
     | '/rankings/$slug'
+    | '/reports/$slug'
     | '/take/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -299,7 +339,9 @@ export interface FileRouteTypes {
     | '/indexes'
     | '/insights'
     | '/login'
+    | '/podcast'
     | '/rankings'
+    | '/reports'
     | '/reset-password'
     | '/rewards'
     | '/robots.txt'
@@ -312,8 +354,10 @@ export interface FileRouteTypes {
     | '/arena/$slug'
     | '/indexes/$slug'
     | '/insights/$slug'
+    | '/podcast/$slug'
     | '/polls/$slug'
     | '/rankings/$slug'
+    | '/reports/$slug'
     | '/take/$slug'
   id:
     | '__root__'
@@ -328,7 +372,9 @@ export interface FileRouteTypes {
     | '/indexes'
     | '/insights'
     | '/login'
+    | '/podcast'
     | '/rankings'
+    | '/reports'
     | '/reset-password'
     | '/rewards'
     | '/robots.txt'
@@ -341,8 +387,10 @@ export interface FileRouteTypes {
     | '/arena/$slug'
     | '/indexes/$slug'
     | '/insights/$slug'
+    | '/podcast/$slug'
     | '/polls/$slug'
     | '/rankings/$slug'
+    | '/reports/$slug'
     | '/take/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -358,7 +406,9 @@ export interface RootRouteChildren {
   IndexesRoute: typeof IndexesRouteWithChildren
   InsightsRoute: typeof InsightsRouteWithChildren
   LoginRoute: typeof LoginRoute
+  PodcastRoute: typeof PodcastRouteWithChildren
   RankingsRoute: typeof RankingsRouteWithChildren
+  ReportsRoute: typeof ReportsRouteWithChildren
   ResetPasswordRoute: typeof ResetPasswordRoute
   RewardsRoute: typeof RewardsRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
@@ -405,11 +455,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reports': {
+      id: '/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof ReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/rankings': {
       id: '/rankings'
       path: '/rankings'
       fullPath: '/rankings'
       preLoaderRoute: typeof RankingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/podcast': {
+      id: '/podcast'
+      path: '/podcast'
+      fullPath: '/podcast'
+      preLoaderRoute: typeof PodcastRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -496,6 +560,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TakeSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reports/$slug': {
+      id: '/reports/$slug'
+      path: '/$slug'
+      fullPath: '/reports/$slug'
+      preLoaderRoute: typeof ReportsSlugRouteImport
+      parentRoute: typeof ReportsRoute
+    }
     '/rankings/$slug': {
       id: '/rankings/$slug'
       path: '/$slug'
@@ -509,6 +580,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/polls/$slug'
       preLoaderRoute: typeof PollsSlugRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/podcast/$slug': {
+      id: '/podcast/$slug'
+      path: '/$slug'
+      fullPath: '/podcast/$slug'
+      preLoaderRoute: typeof PodcastSlugRouteImport
+      parentRoute: typeof PodcastRoute
     }
     '/insights/$slug': {
       id: '/insights/$slug'
@@ -612,6 +690,17 @@ const InsightsRouteWithChildren = InsightsRoute._addFileChildren(
   InsightsRouteChildren,
 )
 
+interface PodcastRouteChildren {
+  PodcastSlugRoute: typeof PodcastSlugRoute
+}
+
+const PodcastRouteChildren: PodcastRouteChildren = {
+  PodcastSlugRoute: PodcastSlugRoute,
+}
+
+const PodcastRouteWithChildren =
+  PodcastRoute._addFileChildren(PodcastRouteChildren)
+
 interface RankingsRouteChildren {
   RankingsSlugRoute: typeof RankingsSlugRoute
 }
@@ -623,6 +712,17 @@ const RankingsRouteChildren: RankingsRouteChildren = {
 const RankingsRouteWithChildren = RankingsRoute._addFileChildren(
   RankingsRouteChildren,
 )
+
+interface ReportsRouteChildren {
+  ReportsSlugRoute: typeof ReportsSlugRoute
+}
+
+const ReportsRouteChildren: ReportsRouteChildren = {
+  ReportsSlugRoute: ReportsSlugRoute,
+}
+
+const ReportsRouteWithChildren =
+  ReportsRoute._addFileChildren(ReportsRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -636,7 +736,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexesRoute: IndexesRouteWithChildren,
   InsightsRoute: InsightsRouteWithChildren,
   LoginRoute: LoginRoute,
+  PodcastRoute: PodcastRouteWithChildren,
   RankingsRoute: RankingsRouteWithChildren,
+  ReportsRoute: ReportsRouteWithChildren,
   ResetPasswordRoute: ResetPasswordRoute,
   RewardsRoute: RewardsRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
