@@ -148,8 +148,8 @@ export function PartnerBar({
   if (variant === "poll") {
     return (
       <div className={cn("flex flex-wrap items-center gap-2 text-xs", className)}>
-        <Chip>Powered by Econsult Africa</Chip>
-        {showTkws && <Chip>Media: The Kenyan Wall Street</Chip>}
+        <Chip><EconsultMark className="mr-1 h-3" />Powered by Econsult Africa</Chip>
+        {showTkws && <Chip><TkwsMark className="mr-1 h-3 w-3" />Media: The Kenyan Wall Street</Chip>}
         {sponsorName && <Chip accent>Sponsored by {sponsorName}</Chip>}
       </div>
     );
