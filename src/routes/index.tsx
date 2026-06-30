@@ -17,13 +17,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Share what you think. Predict what's next. Get paid for both. Powered by Econsult Africa.",
+          "Share what you think. Predict what's next. Get paid in real time. Powered by Econsult Africa.",
       },
       { property: "og:title", content: "Forecast Arena — Africa's Polls & Predictions Platform" },
       {
         property: "og:description",
         content:
-          "Take surveys for instant rewards. Forecast outcomes that move the continent — and earn when you call it right.",
+          "Take surveys for instant rewards. Forecast outcomes that move real markets — and earn when you call it right.",
       },
     ],
   }),
