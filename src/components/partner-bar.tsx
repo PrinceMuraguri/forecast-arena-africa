@@ -1,4 +1,31 @@
 import { cn } from "@/lib/utils";
+import econsultAsset from "@/assets/econsult-africa-logo.png.asset.json";
+import tkwsAsset from "@/assets/kenyan-wallstreet-logo.jpg.asset.json";
+
+const ECONSULT_LOGO = econsultAsset.url;
+const TKWS_LOGO = tkwsAsset.url;
+
+function EconsultMark({ className }: { className?: string }) {
+  return (
+    <img
+      src={ECONSULT_LOGO}
+      alt="Econsult Africa"
+      className={cn("inline-block h-4 w-auto align-[-3px]", className)}
+      loading="lazy"
+    />
+  );
+}
+
+function TkwsMark({ className }: { className?: string }) {
+  return (
+    <img
+      src={TKWS_LOGO}
+      alt="The Kenyan Wall Street"
+      className={cn("inline-block h-4 w-4 rounded-full align-[-3px]", className)}
+      loading="lazy"
+    />
+  );
+}
 
 type Variant = "footer" | "poll" | "cobranded" | "partners" | "chip";
 
@@ -30,7 +57,8 @@ export function PartnerBar({
           className,
         )}
       >
-        <span>
+        <span className="inline-flex items-center gap-1.5">
+          <EconsultMark />
           Powered by{" "}
           <a className="font-medium text-foreground hover:text-primary" href={ECONSULT_URL}>
             Econsult Africa
@@ -39,7 +67,8 @@ export function PartnerBar({
         {showTkws && (
           <>
             <span aria-hidden>·</span>
-            <span>
+            <span className="inline-flex items-center gap-1.5">
+              <TkwsMark />
               Official Media Partner:{" "}
               <a className="font-medium text-foreground hover:text-primary" href={TKWS_URL}>
                 The Kenyan Wall Street
@@ -59,14 +88,16 @@ export function PartnerBar({
           className,
         )}
       >
-        <span className="font-medium">
+        <span className="inline-flex items-center gap-2 font-medium">
+          <EconsultMark className="h-6" />
           Powered by{" "}
           <a className="text-primary hover:underline" href={ECONSULT_URL}>
             Econsult Africa
           </a>
         </span>
         <span aria-hidden className="text-muted-foreground">·</span>
-        <span className="font-medium">
+        <span className="inline-flex items-center gap-2 font-medium">
+          <TkwsMark className="h-6 w-6" />
           Official Media Partner:{" "}
           <a className="text-primary hover:underline" href={TKWS_URL}>
             The Kenyan Wall Street
@@ -85,10 +116,12 @@ export function PartnerBar({
         )}
       >
         <span className="font-display font-semibold">Forecast Arena</span>
-        <Dot /> <span>Powered by Econsult Africa</span>
+        <Dot />
+        <span className="inline-flex items-center gap-1.5"><EconsultMark />Powered by Econsult Africa</span>
         {showTkws && (
           <>
-            <Dot /> <span>Official Media Partner The Kenyan Wall Street</span>
+            <Dot />
+            <span className="inline-flex items-center gap-1.5"><TkwsMark />Official Media Partner The Kenyan Wall Street</span>
           </>
         )}
         {sponsorName && (
@@ -115,8 +148,8 @@ export function PartnerBar({
   if (variant === "poll") {
     return (
       <div className={cn("flex flex-wrap items-center gap-2 text-xs", className)}>
-        <Chip>Powered by Econsult Africa</Chip>
-        {showTkws && <Chip>Media: The Kenyan Wall Street</Chip>}
+        <Chip><EconsultMark className="mr-1 h-3" />Powered by Econsult Africa</Chip>
+        {showTkws && <Chip><TkwsMark className="mr-1 h-3 w-3" />Media: The Kenyan Wall Street</Chip>}
         {sponsorName && <Chip accent>Sponsored by {sponsorName}</Chip>}
       </div>
     );
