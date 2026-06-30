@@ -93,9 +93,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
               </>
             ) : (
               <Button asChild variant="outline" size="sm">
-                <Link to="/wallet">
-                  <span className="font-mono-data">KES 1,240</span>
-                </Link>
+                <Link to="/wallet">Wallet</Link>
               </Button>
             )}
           </div>

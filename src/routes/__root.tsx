@@ -10,6 +10,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import ogImage from "../assets/og-image.jpg";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AuthProvider } from "../lib/auth-stub";
 
@@ -92,7 +93,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Take surveys, get paid. Predict outcomes, earn when you're right. Powered by Econsult Africa.",
       },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
+      { property: "og:site_name", content: "Forecast Arena" },
+      { property: "og:image", content: ogImage },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Forecast Arena — Africa's Polls & Predictions Platform" },
+      {
+        name: "twitter:description",
+        content:
+          "Take surveys, get paid. Predict outcomes, earn when you're right. Powered by Econsult Africa.",
+      },
+      { name: "twitter:image", content: ogImage },
+      { name: "theme-color", content: "#0C1024" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
