@@ -88,14 +88,16 @@ export function PartnerBar({
           className,
         )}
       >
-        <span className="font-medium">
+        <span className="inline-flex items-center gap-2 font-medium">
+          <EconsultMark className="h-6" />
           Powered by{" "}
           <a className="text-primary hover:underline" href={ECONSULT_URL}>
             Econsult Africa
           </a>
         </span>
         <span aria-hidden className="text-muted-foreground">·</span>
-        <span className="font-medium">
+        <span className="inline-flex items-center gap-2 font-medium">
+          <TkwsMark className="h-6 w-6" />
           Official Media Partner:{" "}
           <a className="text-primary hover:underline" href={TKWS_URL}>
             The Kenyan Wall Street
