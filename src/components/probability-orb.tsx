@@ -94,7 +94,7 @@ export function ProbabilityOrb({
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {label && (
         <p className="max-w-[14rem] text-center text-xs text-muted-foreground">{label}</p>
