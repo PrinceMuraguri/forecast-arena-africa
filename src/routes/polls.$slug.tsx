@@ -98,7 +98,7 @@ function PollDetailPage() {
           {user ? (
             <Button asChild className="bg-arena-coral hover:bg-arena-coral/90">
               <Link
-                to={isPrediction ? "/arena/$slug" : "/insights/$slug"}
+                to={isPrediction ? "/arena/$slug" : "/take/$slug"}
                 params={{ slug: poll.slug }}
               >
                 Take part & earn{reward > 0 ? ` · KES ${reward.toLocaleString()}` : ""}

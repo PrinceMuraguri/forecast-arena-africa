@@ -24,6 +24,7 @@ import { Route as ArenaRouteImport } from './routes/arena'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TakeSlugRouteImport } from './routes/take.$slug'
 import { Route as PollsSlugRouteImport } from './routes/polls.$slug'
 import { Route as InsightsSlugRouteImport } from './routes/insights.$slug'
 import { Route as ArenaSlugRouteImport } from './routes/arena.$slug'
@@ -106,6 +107,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TakeSlugRoute = TakeSlugRouteImport.update({
+  id: '/take/$slug',
+  path: '/take/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PollsSlugRoute = PollsSlugRouteImport.update({
   id: '/polls/$slug',
   path: '/polls/$slug',
@@ -164,6 +170,7 @@ export interface FileRoutesByFullPath {
   '/arena/$slug': typeof ArenaSlugRoute
   '/insights/$slug': typeof InsightsSlugRoute
   '/polls/$slug': typeof PollsSlugRoute
+  '/take/$slug': typeof TakeSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -187,6 +194,7 @@ export interface FileRoutesByTo {
   '/arena/$slug': typeof ArenaSlugRoute
   '/insights/$slug': typeof InsightsSlugRoute
   '/polls/$slug': typeof PollsSlugRoute
+  '/take/$slug': typeof TakeSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -212,6 +220,7 @@ export interface FileRoutesById {
   '/arena/$slug': typeof ArenaSlugRoute
   '/insights/$slug': typeof InsightsSlugRoute
   '/polls/$slug': typeof PollsSlugRoute
+  '/take/$slug': typeof TakeSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -237,6 +246,7 @@ export interface FileRouteTypes {
     | '/arena/$slug'
     | '/insights/$slug'
     | '/polls/$slug'
+    | '/take/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -260,6 +270,7 @@ export interface FileRouteTypes {
     | '/arena/$slug'
     | '/insights/$slug'
     | '/polls/$slug'
+    | '/take/$slug'
   id:
     | '__root__'
     | '/'
@@ -284,6 +295,7 @@ export interface FileRouteTypes {
     | '/arena/$slug'
     | '/insights/$slug'
     | '/polls/$slug'
+    | '/take/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -303,6 +315,7 @@ export interface RootRouteChildren {
   SignupRoute: typeof SignupRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   PollsSlugRoute: typeof PollsSlugRoute
+  TakeSlugRoute: typeof TakeSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -410,6 +423,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/take/$slug': {
+      id: '/take/$slug'
+      path: '/take/$slug'
+      fullPath: '/take/$slug'
+      preLoaderRoute: typeof TakeSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/polls/$slug': {
@@ -520,6 +540,7 @@ const rootRouteChildren: RootRouteChildren = {
   SignupRoute: SignupRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   PollsSlugRoute: PollsSlugRoute,
+  TakeSlugRoute: TakeSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
