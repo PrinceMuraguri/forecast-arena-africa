@@ -666,7 +666,22 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      resolve_market: {
+        Args: {
+          p_market_id: string
+          p_resolution_notes?: string
+          p_winning_outcome_id: string
+        }
+        Returns: undefined
+      }
+      set_payout_status: {
+        Args: {
+          p_admin_notes?: string
+          p_new_status: string
+          p_payout_id: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user" | "sponsor" | "partner"
