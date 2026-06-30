@@ -79,6 +79,18 @@ function ArenaPage() {
           Real questions. Real rewards. Real outcomes — updating live.
         </p>
 
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 px-5 py-4">
+          <p className="text-sm text-muted-foreground">
+            Want the full picture? Browse every poll, survey and tracker we run across Africa.
+          </p>
+          <Link
+            to="/explore"
+            className="text-xs uppercase tracking-widest text-live-cyan hover:underline"
+          >
+            Browse all polls →
+          </Link>
+        </div>
+
         <div className="mt-6 flex flex-wrap gap-2">
           <FilterChip
             active={!category}
@@ -94,6 +106,7 @@ function ArenaPage() {
             />
           ))}
         </div>
+
 
         {filtered.length === 0 ? (
           <div className="mt-12 rounded-2xl border border-white/10 bg-card p-10 text-center">
