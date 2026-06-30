@@ -11,7 +11,8 @@ import { useAuth } from "@/lib/auth-stub";
  * Wraps content in `.arena-world` to flip the design tokens to dark mode.
  */
 export function AppShell({ children }: { children: ReactNode }) {
-  const { user, isAuthenticated, signInStub, signOutStub } = useAuth();
+  const { isAuthenticated, signOut } = useAuth();
+  const walletKes = 1240; // Wallet integration arrives in a later phase.
 
   return (
     <div className="arena-world flex min-h-screen flex-col bg-background text-foreground">
@@ -37,7 +38,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Link to="/wallet">
                 <Wallet className="mr-1.5 h-3.5 w-3.5 text-forecast-gold" />
                 <span className="font-mono-data">
-                  KES {(user?.walletKes ?? 1240).toLocaleString()}
+                  KES {walletKes.toLocaleString()}
                 </span>
               </Link>
             </Button>
@@ -46,20 +47,17 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={signOutStub}
+                onClick={() => void signOut()}
                 className="text-white/70 hover:bg-white/10 hover:text-white"
               >
                 <LogOut className="h-4 w-4" />
               </Button>
             ) : (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={signInStub}
-                className="text-white/70 hover:bg-white/10 hover:text-white"
-              >
-                <User className="mr-1.5 h-4 w-4" />
-                Demo sign-in
+              <Button asChild variant="ghost" size="sm" className="text-white/70 hover:bg-white/10 hover:text-white">
+                <Link to="/login">
+                  <User className="mr-1.5 h-4 w-4" />
+                  Sign in
+                </Link>
               </Button>
             )}
           </div>
