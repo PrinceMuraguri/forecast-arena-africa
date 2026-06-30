@@ -1,8 +1,9 @@
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { z } from "zod";
 import { AppShell } from "@/components/app-shell";
 import { ProbabilityOrb } from "@/components/probability-orb";
-import { listArenaMarkets, type ArenaMarket } from "@/lib/arena.functions";
+import { listArenaMarkets, listCategories, type ArenaMarket } from "@/lib/arena.functions";
 
 const marketsQuery = () =>
   queryOptions({
@@ -10,7 +11,18 @@ const marketsQuery = () =>
     queryFn: () => listArenaMarkets(),
   });
 
+const categoriesQuery = () =>
+  queryOptions({
+    queryKey: ["categories"],
+    queryFn: () => listCategories(),
+  });
+
+const searchSchema = z.object({
+  category: z.string().optional(),
+});
+
 export const Route = createFileRoute("/arena")({
+  validateSearch: searchSchema,
   head: () => ({
     meta: [
       { title: "The Arena — Forecast Arena" },
@@ -21,7 +33,10 @@ export const Route = createFileRoute("/arena")({
       },
     ],
   }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(marketsQuery()),
+  loader: ({ context }) => {
+    context.queryClient.ensureQueryData(marketsQuery());
+    context.queryClient.ensureQueryData(categoriesQuery());
+  },
   component: ArenaPage,
   errorComponent: ({ error }) => (
     <AppShell>
@@ -42,7 +57,14 @@ export const Route = createFileRoute("/arena")({
 
 function ArenaPage() {
   const { data: markets } = useSuspenseQuery(marketsQuery());
+  const { data: categories } = useSuspenseQuery(categoriesQuery());
   const router = useRouter();
+  const navigate = useNavigate({ from: "/arena" });
+  const { category } = Route.useSearch();
+
+  const filtered = category
+    ? markets.filter((m) => m.category?.slug === category)
+    : markets;
 
   return (
     <AppShell>
@@ -57,9 +79,25 @@ function ArenaPage() {
           Real questions. Real rewards. Real outcomes — updating live.
         </p>
 
-        {markets.length === 0 ? (
+        <div className="mt-6 flex flex-wrap gap-2">
+          <FilterChip
+            active={!category}
+            onClick={() => navigate({ search: { category: undefined } })}
+            label="All"
+          />
+          {categories.map((c) => (
+            <FilterChip
+              key={c.id}
+              active={category === c.slug}
+              onClick={() => navigate({ search: { category: c.slug } })}
+              label={c.name}
+            />
+          ))}
+        </div>
+
+        {filtered.length === 0 ? (
           <div className="mt-12 rounded-2xl border border-white/10 bg-card p-10 text-center">
-            <p className="font-display text-lg">No open markets right now.</p>
+            <p className="font-display text-lg">No open markets in this category.</p>
             <p className="mt-2 text-sm text-muted-foreground">
               New questions drop weekly. Check back soon.
             </p>
@@ -71,14 +109,38 @@ function ArenaPage() {
             </button>
           </div>
         ) : (
-          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {markets.map((m) => (
+          <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {filtered.map((m) => (
               <MarketCard key={m.id} market={m} />
             ))}
           </div>
         )}
       </section>
     </AppShell>
+  );
+}
+
+function FilterChip({
+  active,
+  onClick,
+  label,
+}: {
+  active: boolean;
+  onClick: () => void;
+  label: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`rounded-full border px-3 py-1 text-xs uppercase tracking-widest transition-colors ${
+        active
+          ? "border-live-cyan bg-live-cyan/10 text-live-cyan"
+          : "border-white/15 text-muted-foreground hover:border-white/40 hover:text-foreground"
+      }`}
+    >
+      {label}
+    </button>
   );
 }
 
@@ -89,13 +151,17 @@ function MarketCard({ market }: { market: ArenaMarket }) {
   const countdown = closes ? formatCountdown(closes) : "—";
 
   return (
-    <article className="rounded-2xl border border-white/10 bg-card p-6 transition-colors hover:border-live-cyan/40">
+    <Link
+      to="/arena/$slug"
+      params={{ slug: market.slug }}
+      className="group block rounded-2xl border border-white/10 bg-card p-6 transition-colors hover:border-live-cyan/40"
+    >
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-[10px] uppercase tracking-widest text-muted-foreground">
             {market.sponsor_name ? `Sponsored · ${market.sponsor_name}` : market.category?.name ?? "Market"}
           </p>
-          <h3 className="mt-2 font-display text-lg font-semibold leading-snug">
+          <h3 className="mt-2 font-display text-lg font-semibold leading-snug group-hover:text-live-cyan">
             {market.title}
           </h3>
         </div>
@@ -113,7 +179,7 @@ function MarketCard({ market }: { market: ArenaMarket }) {
           <div className="font-mono-data text-live-cyan">{countdown}</div>
         </div>
       </div>
-    </article>
+    </Link>
   );
 }
 
