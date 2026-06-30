@@ -1,12 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { Wallet, LogOut, User, Shield } from "lucide-react";
+import { Wallet, LogOut, User, Shield, Building2 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { PartnerBar } from "@/components/partner-bar";
 import { PageTransition } from "@/components/page-transition";
 import { useAuth } from "@/lib/auth-stub";
 import { adminCheck } from "@/lib/admin.functions";
+import { getMySponsorOrgs } from "@/lib/sponsor.functions";
 
 /**
  * The dark/electric "arena world" shell, for the logged-in app surface.
