@@ -163,10 +163,10 @@ function SignInCta({ slug }: { slug: string }) {
       </p>
       <div className="mt-4 flex gap-3">
         <Button asChild className="bg-arena-coral hover:bg-arena-coral/90">
-          <Link to="/signup" search={{ next: `/insights/${slug}` }}>Create account</Link>
+          <Link to="/signup">Create account</Link>
         </Button>
         <Button asChild variant="outline">
-          <Link to="/login" search={{ next: `/insights/${slug}` }}>Sign in</Link>
+          <Link to="/login">Sign in</Link>
         </Button>
       </div>
     </div>
