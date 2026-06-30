@@ -41,10 +41,7 @@ export const getPollDetail = createServerFn({ method: "GET" })
     const sb = publicClient();
     const { data: poll, error } = await sb
       .from("polls")
-      .select(
-        POLL_LIST_COLS +
-          ", purpose, what_it_measures, methodology_note, cross_country, sponsor_logo_url",
-      )
+      .select("*, category:categories(slug,name,color,icon)")
       .eq("slug", data.slug)
       .maybeSingle();
     if (error) throw new Error(error.message);
