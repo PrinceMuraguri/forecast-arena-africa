@@ -1,4 +1,5 @@
-import { motion } from "motion/react";
+import { motion, useAnimation } from "motion/react";
+import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 
 interface ProbabilityOrbProps {
@@ -22,13 +23,33 @@ export function ProbabilityOrb({
 }: ProbabilityOrbProps) {
   const p = Math.max(0, Math.min(100, probability));
   const fillHeight = (p / 100) * size;
+  const prev = useRef(p);
+  const pulse = useAnimation();
+
+  useEffect(() => {
+    if (Math.abs(p - prev.current) >= 0.5) {
+      const up = p > prev.current;
+      pulse.start({
+        boxShadow: [
+          "0 0 60px -10px rgba(39,194,212,0.45)",
+          up
+            ? "0 0 80px 4px rgba(39,194,212,0.85)"
+            : "0 0 80px 4px rgba(255,90,84,0.7)",
+          "0 0 60px -10px rgba(39,194,212,0.45)",
+        ],
+        transition: { duration: 0.9, ease: "easeOut" },
+      });
+    }
+    prev.current = p;
+  }, [p, pulse]);
 
   return (
     <div
       className={cn("relative inline-flex flex-col items-center gap-2", className)}
       style={{ width: size }}
     >
-      <div
+      <motion.div
+        animate={pulse}
         className="relative overflow-hidden rounded-full border border-white/20 shadow-[0_0_60px_-10px_rgba(39,194,212,0.45)]"
         style={{ width: size, height: size }}
       >
