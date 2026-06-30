@@ -512,25 +512,33 @@ function Index() {
           tag="Live in Kenya · expanding"
         />
         <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
-          {countries.map((c: any) => (
-            <Link
-              key={c.code}
-              to="/insights"
-              search={c.is_live ? ({ country: c.code } as any) : undefined}
-              disabled={!c.is_live}
-              className={`rounded-2xl border p-4 text-left transition-colors ${
-                c.is_live
-                  ? "border-foreground/10 bg-white/70 hover:border-arena-coral/60"
-                  : "pointer-events-none border-dashed border-foreground/10 bg-foreground/[0.02] text-muted-foreground"
-              }`}
-            >
-              <p className="text-2xl">{c.flag_emoji}</p>
-              <p className="mt-2 font-display text-sm font-semibold">{c.name}</p>
-              <p className="mt-0.5 text-[10px] uppercase tracking-widest text-muted-foreground">
-                {c.is_live ? "Live" : "Coming soon"}
-              </p>
-            </Link>
-          ))}
+          {countries.map((c: any) =>
+            c.is_live ? (
+              <Link
+                key={c.code}
+                to="/insights"
+                search={{ country: c.code } as any}
+                className="rounded-2xl border border-foreground/10 bg-white/70 p-4 text-left transition-colors hover:border-arena-coral/60"
+              >
+                <p className="text-2xl">{c.flag_emoji}</p>
+                <p className="mt-2 font-display text-sm font-semibold">{c.name}</p>
+                <p className="mt-0.5 text-[10px] uppercase tracking-widest text-muted-foreground">
+                  Live
+                </p>
+              </Link>
+            ) : (
+              <div
+                key={c.code}
+                className="rounded-2xl border border-dashed border-foreground/10 bg-foreground/[0.02] p-4 text-left text-muted-foreground"
+              >
+                <p className="text-2xl">{c.flag_emoji}</p>
+                <p className="mt-2 font-display text-sm font-semibold">{c.name}</p>
+                <p className="mt-0.5 text-[10px] uppercase tracking-widest text-muted-foreground">
+                  Coming soon
+                </p>
+              </div>
+            ),
+          )}
         </div>
       </section>
 
