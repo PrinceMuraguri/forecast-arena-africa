@@ -23,7 +23,7 @@ const pollQuery = (slug: string) =>
     queryFn: () => getPollBySlug({ data: { slug } }),
   });
 
-export const Route = createFileRoute("/insights/$slug")({
+export const Route = createFileRoute("/take/$slug")({
   head: ({ params }) => ({
     meta: [
       { title: `${params.slug} — Insights poll` },
@@ -42,8 +42,8 @@ export const Route = createFileRoute("/insights/$slug")({
       <div className="mx-auto max-w-2xl px-4 py-20 text-center">
         <h1 className="font-display text-2xl font-semibold">Couldn't load this poll.</h1>
         <p className="mt-2 text-sm text-muted-foreground">{error.message}</p>
-        <Link to="/insights" className="mt-6 inline-block text-xs uppercase tracking-widest text-arena-coral">
-          ← Back to Insights
+        <Link to="/explore" className="mt-6 inline-block text-xs uppercase tracking-widest text-arena-coral">
+          ← Back to Explore
         </Link>
       </div>
     </SiteShell>
@@ -100,8 +100,8 @@ function PollPage() {
   return (
     <SiteShell>
       <section className="mx-auto max-w-3xl px-4 py-12">
-        <Link to="/insights" className="text-xs uppercase tracking-widest text-muted-foreground hover:text-arena-coral">
-          ← Insights
+        <Link to="/explore" className="text-xs uppercase tracking-widest text-muted-foreground hover:text-arena-coral">
+          ← Explore
         </Link>
         <p className="mt-6 text-[10px] uppercase tracking-widest text-arena-coral">
           {poll.category?.name ?? "Poll"}
@@ -133,7 +133,7 @@ function PollPage() {
             </p>
             <div className="mt-4 flex gap-3">
               <Button asChild className="bg-arena-coral hover:bg-arena-coral/90">
-                <Link to="/insights">Find another poll</Link>
+                <Link to="/explore">Find another poll</Link>
               </Button>
               <Button asChild variant="outline">
                 <Link to="/wallet">View wallet</Link>
