@@ -24,6 +24,7 @@ import { Route as ArenaRouteImport } from './routes/arena'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PollsSlugRouteImport } from './routes/polls.$slug'
 import { Route as InsightsSlugRouteImport } from './routes/insights.$slug'
 import { Route as ArenaSlugRouteImport } from './routes/arena.$slug'
 import { Route as AuthenticatedWalletRouteImport } from './routes/_authenticated/wallet'
@@ -105,6 +106,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PollsSlugRoute = PollsSlugRouteImport.update({
+  id: '/polls/$slug',
+  path: '/polls/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InsightsSlugRoute = InsightsSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -157,6 +163,7 @@ export interface FileRoutesByFullPath {
   '/wallet': typeof AuthenticatedWalletRoute
   '/arena/$slug': typeof ArenaSlugRoute
   '/insights/$slug': typeof InsightsSlugRoute
+  '/polls/$slug': typeof PollsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -179,6 +186,7 @@ export interface FileRoutesByTo {
   '/wallet': typeof AuthenticatedWalletRoute
   '/arena/$slug': typeof ArenaSlugRoute
   '/insights/$slug': typeof InsightsSlugRoute
+  '/polls/$slug': typeof PollsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -203,6 +211,7 @@ export interface FileRoutesById {
   '/_authenticated/wallet': typeof AuthenticatedWalletRoute
   '/arena/$slug': typeof ArenaSlugRoute
   '/insights/$slug': typeof InsightsSlugRoute
+  '/polls/$slug': typeof PollsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -227,6 +236,7 @@ export interface FileRouteTypes {
     | '/wallet'
     | '/arena/$slug'
     | '/insights/$slug'
+    | '/polls/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -249,6 +259,7 @@ export interface FileRouteTypes {
     | '/wallet'
     | '/arena/$slug'
     | '/insights/$slug'
+    | '/polls/$slug'
   id:
     | '__root__'
     | '/'
@@ -272,6 +283,7 @@ export interface FileRouteTypes {
     | '/_authenticated/wallet'
     | '/arena/$slug'
     | '/insights/$slug'
+    | '/polls/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -290,6 +302,7 @@ export interface RootRouteChildren {
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SignupRoute: typeof SignupRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  PollsSlugRoute: typeof PollsSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -399,6 +412,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/polls/$slug': {
+      id: '/polls/$slug'
+      path: '/polls/$slug'
+      fullPath: '/polls/$slug'
+      preLoaderRoute: typeof PollsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/insights/$slug': {
       id: '/insights/$slug'
       path: '/$slug'
@@ -499,6 +519,7 @@ const rootRouteChildren: RootRouteChildren = {
   RobotsDottxtRoute: RobotsDottxtRoute,
   SignupRoute: SignupRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  PollsSlugRoute: PollsSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
