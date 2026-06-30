@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SearchRouteImport } from './routes/search'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as RewardsRouteImport } from './routes/rewards'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
@@ -49,6 +50,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
@@ -213,6 +219,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRoute
   '/robots.txt': typeof RobotsDottxtRoute
+  '/search': typeof SearchRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -245,6 +252,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRoute
   '/robots.txt': typeof RobotsDottxtRoute
+  '/search': typeof SearchRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -279,6 +287,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRoute
   '/robots.txt': typeof RobotsDottxtRoute
+  '/search': typeof SearchRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
@@ -313,6 +322,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/rewards'
     | '/robots.txt'
+    | '/search'
     | '/signup'
     | '/sitemap.xml'
     | '/admin'
@@ -345,6 +355,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/rewards'
     | '/robots.txt'
+    | '/search'
     | '/signup'
     | '/sitemap.xml'
     | '/admin'
@@ -378,6 +389,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/rewards'
     | '/robots.txt'
+    | '/search'
     | '/signup'
     | '/sitemap.xml'
     | '/_authenticated/admin'
@@ -412,6 +424,7 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   RewardsRoute: typeof RewardsRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
+  SearchRoute: typeof SearchRoute
   SignupRoute: typeof SignupRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   PollsSlugRoute: typeof PollsSlugRoute
@@ -432,6 +445,13 @@ declare module '@tanstack/react-router' {
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/robots.txt': {
@@ -742,6 +762,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   RewardsRoute: RewardsRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
+  SearchRoute: SearchRoute,
   SignupRoute: SignupRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   PollsSlugRoute: PollsSlugRoute,

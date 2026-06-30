@@ -97,11 +97,14 @@ function SearchPage() {
                     {items.map((h) => (
                       <li key={`${h.kind}-${h.slug}`}>
                         <Link
-                          to={`${g.path}/$slug` as any}
-                          params={{ slug: h.slug }}
+                          {...({
+                            to: `${g.path}/$slug`,
+                            params: { slug: h.slug },
+                          } as any)}
                           className="block rounded-2xl border border-border bg-card p-4 transition hover:border-primary/50 hover:shadow-md"
                         >
                           <div className="text-[10px] font-semibold uppercase tracking-wide text-primary">
+
                             {g.label.slice(0, -1)}
                           </div>
                           <div className="mt-1 font-medium">{h.title}</div>
