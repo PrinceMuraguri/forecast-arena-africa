@@ -9,8 +9,68 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WalletRouteImport } from './routes/wallet'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as RewardsRouteImport } from './routes/rewards'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as InsightsRouteImport } from './routes/insights'
+import { Route as HowItWorksRouteImport } from './routes/how-it-works'
+import { Route as ForSponsorsRouteImport } from './routes/for-sponsors'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as ArenaRouteImport } from './routes/arena'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
+const WalletRoute = WalletRouteImport.update({
+  id: '/wallet',
+  path: '/wallet',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RewardsRoute = RewardsRouteImport.update({
+  id: '/rewards',
+  path: '/rewards',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InsightsRoute = InsightsRouteImport.update({
+  id: '/insights',
+  path: '/insights',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HowItWorksRoute = HowItWorksRouteImport.update({
+  id: '/how-it-works',
+  path: '/how-it-works',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForSponsorsRoute = ForSponsorsRouteImport.update({
+  id: '/for-sponsors',
+  path: '/for-sponsors',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArenaRoute = ArenaRouteImport.update({
+  id: '/arena',
+  path: '/arena',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +79,172 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/arena': typeof ArenaRoute
+  '/dashboard': typeof DashboardRoute
+  '/for-sponsors': typeof ForSponsorsRoute
+  '/how-it-works': typeof HowItWorksRoute
+  '/insights': typeof InsightsRoute
+  '/login': typeof LoginRoute
+  '/rewards': typeof RewardsRoute
+  '/signup': typeof SignupRoute
+  '/wallet': typeof WalletRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/arena': typeof ArenaRoute
+  '/dashboard': typeof DashboardRoute
+  '/for-sponsors': typeof ForSponsorsRoute
+  '/how-it-works': typeof HowItWorksRoute
+  '/insights': typeof InsightsRoute
+  '/login': typeof LoginRoute
+  '/rewards': typeof RewardsRoute
+  '/signup': typeof SignupRoute
+  '/wallet': typeof WalletRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/arena': typeof ArenaRoute
+  '/dashboard': typeof DashboardRoute
+  '/for-sponsors': typeof ForSponsorsRoute
+  '/how-it-works': typeof HowItWorksRoute
+  '/insights': typeof InsightsRoute
+  '/login': typeof LoginRoute
+  '/rewards': typeof RewardsRoute
+  '/signup': typeof SignupRoute
+  '/wallet': typeof WalletRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/arena'
+    | '/dashboard'
+    | '/for-sponsors'
+    | '/how-it-works'
+    | '/insights'
+    | '/login'
+    | '/rewards'
+    | '/signup'
+    | '/wallet'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/arena'
+    | '/dashboard'
+    | '/for-sponsors'
+    | '/how-it-works'
+    | '/insights'
+    | '/login'
+    | '/rewards'
+    | '/signup'
+    | '/wallet'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/arena'
+    | '/dashboard'
+    | '/for-sponsors'
+    | '/how-it-works'
+    | '/insights'
+    | '/login'
+    | '/rewards'
+    | '/signup'
+    | '/wallet'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  ArenaRoute: typeof ArenaRoute
+  DashboardRoute: typeof DashboardRoute
+  ForSponsorsRoute: typeof ForSponsorsRoute
+  HowItWorksRoute: typeof HowItWorksRoute
+  InsightsRoute: typeof InsightsRoute
+  LoginRoute: typeof LoginRoute
+  RewardsRoute: typeof RewardsRoute
+  SignupRoute: typeof SignupRoute
+  WalletRoute: typeof WalletRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/wallet': {
+      id: '/wallet'
+      path: '/wallet'
+      fullPath: '/wallet'
+      preLoaderRoute: typeof WalletRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rewards': {
+      id: '/rewards'
+      path: '/rewards'
+      fullPath: '/rewards'
+      preLoaderRoute: typeof RewardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/insights': {
+      id: '/insights'
+      path: '/insights'
+      fullPath: '/insights'
+      preLoaderRoute: typeof InsightsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/how-it-works': {
+      id: '/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/how-it-works'
+      preLoaderRoute: typeof HowItWorksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/for-sponsors': {
+      id: '/for-sponsors'
+      path: '/for-sponsors'
+      fullPath: '/for-sponsors'
+      preLoaderRoute: typeof ForSponsorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/arena': {
+      id: '/arena'
+      path: '/arena'
+      fullPath: '/arena'
+      preLoaderRoute: typeof ArenaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,17 +257,17 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  ArenaRoute: ArenaRoute,
+  DashboardRoute: DashboardRoute,
+  ForSponsorsRoute: ForSponsorsRoute,
+  HowItWorksRoute: HowItWorksRoute,
+  InsightsRoute: InsightsRoute,
+  LoginRoute: LoginRoute,
+  RewardsRoute: RewardsRoute,
+  SignupRoute: SignupRoute,
+  WalletRoute: WalletRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
