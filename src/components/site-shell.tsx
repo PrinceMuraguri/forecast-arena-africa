@@ -34,7 +34,9 @@ export function SiteShell({ children }: { children: ReactNode }) {
 
           {!isAuthenticated && (
             <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
+              <Link to="/explore" className="hover:text-primary">Explore</Link>
               <Link to="/arena" className="hover:text-primary">The Arena</Link>
+
               <Link to="/how-it-works" className="hover:text-primary">How It Works</Link>
               <div className="group relative">
                 <Link to="/insights" className="hover:text-primary">Insights</Link>
@@ -91,7 +93,9 @@ export function SiteShell({ children }: { children: ReactNode }) {
         {mobileOpen && (
           <div className="border-t border-border md:hidden">
             <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-3 text-sm font-medium">
+              <Link to="/explore" className="rounded-md px-2 py-2 hover:bg-muted">Explore</Link>
               <Link to="/arena" className="rounded-md px-2 py-2 hover:bg-muted">The Arena</Link>
+
               <Link to="/how-it-works" className="rounded-md px-2 py-2 hover:bg-muted">How It Works</Link>
               <Link to="/insights" className="rounded-md px-2 py-2 hover:bg-muted">Insights</Link>
               <Link to="/for-sponsors" className="rounded-md px-2 py-2 hover:bg-muted">For Sponsors</Link>
