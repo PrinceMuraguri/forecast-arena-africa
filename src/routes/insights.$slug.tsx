@@ -154,7 +154,7 @@ function PollPage() {
   );
 }
 
-function SignInCta({ slug }: { slug: string }) {
+function SignInCta() {
   return (
     <div className="mt-8 rounded-2xl border border-foreground/10 bg-white/60 p-6">
       <p className="font-display text-lg font-semibold">Sign in to complete this poll.</p>
