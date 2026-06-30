@@ -22,6 +22,13 @@ export function AppShell({ children }: { children: ReactNode }) {
     enabled: isAuthenticated,
     staleTime: 60_000,
   });
+  const { data: sponsorOrgs } = useQuery({
+    queryKey: ["my-sponsor-orgs"],
+    queryFn: () => getMySponsorOrgs(),
+    enabled: isAuthenticated,
+    staleTime: 60_000,
+  });
+  const hasSponsorOrg = (sponsorOrgs?.length ?? 0) > 0;
 
   return (
     <div className="arena-world flex min-h-screen flex-col bg-background text-foreground">
