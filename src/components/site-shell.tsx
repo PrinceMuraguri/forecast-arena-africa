@@ -34,7 +34,9 @@ export function SiteShell({ children }: { children: ReactNode }) {
 
           {!isAuthenticated && (
             <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
+              <Link to="/explore" className="hover:text-primary">Explore</Link>
               <Link to="/arena" className="hover:text-primary">The Arena</Link>
+
               <Link to="/how-it-works" className="hover:text-primary">How It Works</Link>
               <div className="group relative">
                 <Link to="/insights" className="hover:text-primary">Insights</Link>
