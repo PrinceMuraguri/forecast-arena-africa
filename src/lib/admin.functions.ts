@@ -142,7 +142,8 @@ export const adminSetPayoutStatus = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     await assertAdmin(context.userId);
-    const { error } = await context.supabase.rpc("set_payout_status" as never, {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin.rpc("set_payout_status" as never, {
       p_payout_id: data.payoutId,
       p_new_status: data.status,
       p_admin_notes: data.notes,
@@ -150,6 +151,7 @@ export const adminSetPayoutStatus = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
 
 export type AdminCreateMarketInput = {
   categoryId: string | null;
