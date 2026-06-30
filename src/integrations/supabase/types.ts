@@ -14,12 +14,97 @@ export type Database = {
   }
   public: {
     Tables: {
+      articles: {
+        Row: {
+          article_type: string
+          author: string | null
+          body: Json
+          byline: string
+          category_id: string | null
+          country_code: string | null
+          created_at: string
+          dek: string | null
+          hero_image_url: string | null
+          id: string
+          is_featured: boolean
+          is_sample: boolean
+          linked_index_slug: string | null
+          linked_poll_slug: string | null
+          linked_report_slug: string | null
+          published_at: string
+          read_minutes: number | null
+          slug: string
+          sponsor_name: string | null
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          article_type?: string
+          author?: string | null
+          body?: Json
+          byline?: string
+          category_id?: string | null
+          country_code?: string | null
+          created_at?: string
+          dek?: string | null
+          hero_image_url?: string | null
+          id?: string
+          is_featured?: boolean
+          is_sample?: boolean
+          linked_index_slug?: string | null
+          linked_poll_slug?: string | null
+          linked_report_slug?: string | null
+          published_at?: string
+          read_minutes?: number | null
+          slug: string
+          sponsor_name?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          article_type?: string
+          author?: string | null
+          body?: Json
+          byline?: string
+          category_id?: string | null
+          country_code?: string | null
+          created_at?: string
+          dek?: string | null
+          hero_image_url?: string | null
+          id?: string
+          is_featured?: boolean
+          is_sample?: boolean
+          linked_index_slug?: string | null
+          linked_poll_slug?: string | null
+          linked_report_slug?: string | null
+          published_at?: string
+          read_minutes?: number | null
+          slug?: string
+          sponsor_name?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "articles_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       categories: {
         Row: {
           color: string | null
           created_at: string
           description: string | null
+          icon: string | null
           id: string
+          kind: string
           name: string
           slug: string
           sort_order: number
@@ -29,7 +114,9 @@ export type Database = {
           color?: string | null
           created_at?: string
           description?: string | null
+          icon?: string | null
           id?: string
+          kind?: string
           name: string
           slug: string
           sort_order?: number
@@ -39,11 +126,76 @@ export type Database = {
           color?: string | null
           created_at?: string
           description?: string | null
+          icon?: string | null
           id?: string
+          kind?: string
           name?: string
           slug?: string
           sort_order?: number
           updated_at?: string
+        }
+        Relationships: []
+      }
+      countries: {
+        Row: {
+          code: string
+          created_at: string
+          flag_emoji: string | null
+          id: string
+          is_live: boolean
+          name: string
+          sort_order: number
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          flag_emoji?: string | null
+          id?: string
+          is_live?: boolean
+          name: string
+          sort_order?: number
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          flag_emoji?: string | null
+          id?: string
+          is_live?: boolean
+          name?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      daily_questions: {
+        Row: {
+          active_date: string
+          country_code: string | null
+          created_at: string
+          id: string
+          is_sample: boolean
+          options: Json
+          question: string
+          results: Json
+        }
+        Insert: {
+          active_date?: string
+          country_code?: string | null
+          created_at?: string
+          id?: string
+          is_sample?: boolean
+          options?: Json
+          question: string
+          results?: Json
+        }
+        Update: {
+          active_date?: string
+          country_code?: string | null
+          created_at?: string
+          id?: string
+          is_sample?: boolean
+          options?: Json
+          question?: string
+          results?: Json
         }
         Relationships: []
       }
@@ -70,6 +222,103 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      index_points: {
+        Row: {
+          created_at: string
+          id: string
+          index_id: string
+          period: string
+          value: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          index_id: string
+          period: string
+          value: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          index_id?: string
+          period?: string
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "index_points_index_id_fkey"
+            columns: ["index_id"]
+            isOneToOne: false
+            referencedRelation: "indexes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      indexes: {
+        Row: {
+          category_id: string | null
+          change_value: number | null
+          country_code: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_published: boolean
+          is_sample: boolean
+          latest_value: number | null
+          methodology_note: string | null
+          name: string
+          slug: string
+          sort_order: number
+          source_standard: string | null
+          unit: string | null
+          updated_at: string
+        }
+        Insert: {
+          category_id?: string | null
+          change_value?: number | null
+          country_code?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_published?: boolean
+          is_sample?: boolean
+          latest_value?: number | null
+          methodology_note?: string | null
+          name: string
+          slug: string
+          sort_order?: number
+          source_standard?: string | null
+          unit?: string | null
+          updated_at?: string
+        }
+        Update: {
+          category_id?: string | null
+          change_value?: number | null
+          country_code?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_published?: boolean
+          is_sample?: boolean
+          latest_value?: number | null
+          methodology_note?: string | null
+          name?: string
+          slug?: string
+          sort_order?: number
+          source_standard?: string | null
+          unit?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "indexes_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       market_outcomes: {
         Row: {
@@ -291,6 +540,60 @@ export type Database = {
         }
         Relationships: []
       }
+      podcast_episodes: {
+        Row: {
+          audio_url: string | null
+          created_at: string
+          description: string | null
+          duration_label: string | null
+          guest_name: string | null
+          guest_org: string | null
+          guest_title: string | null
+          id: string
+          is_published: boolean
+          linked_market_slug: string | null
+          published_at: string
+          slug: string
+          title: string
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          audio_url?: string | null
+          created_at?: string
+          description?: string | null
+          duration_label?: string | null
+          guest_name?: string | null
+          guest_org?: string | null
+          guest_title?: string | null
+          id?: string
+          is_published?: boolean
+          linked_market_slug?: string | null
+          published_at?: string
+          slug: string
+          title: string
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          audio_url?: string | null
+          created_at?: string
+          description?: string | null
+          duration_label?: string | null
+          guest_name?: string | null
+          guest_org?: string | null
+          guest_title?: string | null
+          id?: string
+          is_published?: boolean
+          linked_market_slug?: string | null
+          published_at?: string
+          slug?: string
+          title?: string
+          updated_at?: string
+          video_url?: string | null
+        }
+        Relationships: []
+      }
       poll_answers: {
         Row: {
           created_at: string
@@ -461,10 +764,21 @@ export type Database = {
         Row: {
           category_id: string | null
           closes_at: string | null
+          completion_reward_kes: number | null
+          country_code: string
           created_at: string
+          cross_country: Json | null
+          description: string | null
+          est_minutes: number | null
           id: string
+          index_slug: string | null
+          kind: string
+          methodology_note: string | null
           opens_at: string | null
+          preview_enabled: boolean
+          purpose: string | null
           question: string
+          respondent_count: number
           reward_kes: number
           slug: string
           sponsor_logo_url: string | null
@@ -473,14 +787,26 @@ export type Database = {
           summary: string | null
           title: string
           updated_at: string
+          what_it_measures: string | null
         }
         Insert: {
           category_id?: string | null
           closes_at?: string | null
+          completion_reward_kes?: number | null
+          country_code?: string
           created_at?: string
+          cross_country?: Json | null
+          description?: string | null
+          est_minutes?: number | null
           id?: string
+          index_slug?: string | null
+          kind?: string
+          methodology_note?: string | null
           opens_at?: string | null
+          preview_enabled?: boolean
+          purpose?: string | null
           question: string
+          respondent_count?: number
           reward_kes?: number
           slug: string
           sponsor_logo_url?: string | null
@@ -489,14 +815,26 @@ export type Database = {
           summary?: string | null
           title: string
           updated_at?: string
+          what_it_measures?: string | null
         }
         Update: {
           category_id?: string | null
           closes_at?: string | null
+          completion_reward_kes?: number | null
+          country_code?: string
           created_at?: string
+          cross_country?: Json | null
+          description?: string | null
+          est_minutes?: number | null
           id?: string
+          index_slug?: string | null
+          kind?: string
+          methodology_note?: string | null
           opens_at?: string | null
+          preview_enabled?: boolean
+          purpose?: string | null
           question?: string
+          respondent_count?: number
           reward_kes?: number
           slug?: string
           sponsor_logo_url?: string | null
@@ -505,6 +843,7 @@ export type Database = {
           summary?: string | null
           title?: string
           updated_at?: string
+          what_it_measures?: string | null
         }
         Relationships: [
           {
@@ -608,6 +947,174 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      ranking_entries: {
+        Row: {
+          change: number | null
+          created_at: string
+          id: string
+          label: string
+          logo_url: string | null
+          rank: number
+          ranking_id: string
+          score: number | null
+        }
+        Insert: {
+          change?: number | null
+          created_at?: string
+          id?: string
+          label: string
+          logo_url?: string | null
+          rank: number
+          ranking_id: string
+          score?: number | null
+        }
+        Update: {
+          change?: number | null
+          created_at?: string
+          id?: string
+          label?: string
+          logo_url?: string | null
+          rank?: number
+          ranking_id?: string
+          score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ranking_entries_ranking_id_fkey"
+            columns: ["ranking_id"]
+            isOneToOne: false
+            referencedRelation: "rankings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rankings: {
+        Row: {
+          category_id: string | null
+          country_code: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_published: boolean
+          is_sample: boolean
+          methodology_note: string | null
+          published_at: string
+          sample_size: number | null
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category_id?: string | null
+          country_code?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_published?: boolean
+          is_sample?: boolean
+          methodology_note?: string | null
+          published_at?: string
+          sample_size?: number | null
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category_id?: string | null
+          country_code?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_published?: boolean
+          is_sample?: boolean
+          methodology_note?: string | null
+          published_at?: string
+          sample_size?: number | null
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rankings_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reports: {
+        Row: {
+          access: string
+          category_id: string | null
+          contents: Json
+          country_code: string | null
+          cover_url: string | null
+          created_at: string
+          file_url: string | null
+          id: string
+          is_featured: boolean
+          is_published: boolean
+          is_sample: boolean
+          price_kes: number
+          published_at: string
+          sample_url: string | null
+          slug: string
+          summary: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          access?: string
+          category_id?: string | null
+          contents?: Json
+          country_code?: string | null
+          cover_url?: string | null
+          created_at?: string
+          file_url?: string | null
+          id?: string
+          is_featured?: boolean
+          is_published?: boolean
+          is_sample?: boolean
+          price_kes?: number
+          published_at?: string
+          sample_url?: string | null
+          slug: string
+          summary?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          access?: string
+          category_id?: string | null
+          contents?: Json
+          country_code?: string | null
+          cover_url?: string | null
+          created_at?: string
+          file_url?: string | null
+          id?: string
+          is_featured?: boolean
+          is_published?: boolean
+          is_sample?: boolean
+          price_kes?: number
+          published_at?: string
+          sample_url?: string | null
+          slug?: string
+          summary?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reports_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
