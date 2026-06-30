@@ -153,11 +153,13 @@ function InsightsPage() {
 
   return (
     <SiteShell>
+      <NonLiveCountryBanner countryCode={search.country} />
       <PageHero
         eyebrow="Insights"
         title="What Africa is thinking. And what comes next."
         subtitle="Articles, live indexes, rankings, and reports — from the polls you help create."
       />
+
 
       {/* Search + country */}
       <section className="mx-auto max-w-6xl px-4 py-8">
