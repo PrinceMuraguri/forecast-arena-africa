@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-stub";
 import { getMarketBySlug, type ArenaMarket } from "@/lib/arena.functions";
 import { submitPrediction, getMyPredictionForMarket } from "@/lib/predictions.functions";
+import { useMarketRealtime } from "@/lib/use-market-realtime";
 
 const marketQuery = (slug: string) =>
   queryOptions({
@@ -71,6 +72,7 @@ function MarketPage() {
 }
 
 function MarketView({ market }: { market: ArenaMarket }) {
+  useMarketRealtime(market.id, market.slug);
   const { user } = useAuth();
   const router = useRouter();
   const queryClient = useQueryClient();

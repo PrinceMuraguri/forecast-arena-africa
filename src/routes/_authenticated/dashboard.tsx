@@ -3,6 +3,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { AppShell } from "@/components/app-shell";
 import { Button } from "@/components/ui/button";
 import { getDashboard } from "@/lib/dashboard.functions";
+import { useResolutionToasts } from "@/lib/use-resolution-toasts";
 
 const dashboardQuery = () =>
   queryOptions({
@@ -28,6 +29,7 @@ function fmtKes(n: number) {
 }
 
 function DashboardPage() {
+  useResolutionToasts();
   const { data } = useSuspenseQuery(dashboardQuery());
   const { stats, recent } = data;
 
