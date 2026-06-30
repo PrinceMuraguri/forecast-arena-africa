@@ -334,12 +334,3 @@ function Step({ n, title, children }: { n: string; title: string; children: Reac
   );
 }
 
-function TrustCard({ title, body }: { title: string; body: string }) {
-  return (
-    <div className="rounded-2xl border border-border bg-card p-6">
-      <BadgeCheck className="h-5 w-5 text-signal-blue" />
-      <h3 className="mt-3 font-display text-lg font-semibold">{title}</h3>
-      <p className="mt-2 text-sm text-muted-foreground">{body}</p>
-    </div>
-  );
-}
