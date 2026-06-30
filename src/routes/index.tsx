@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
-import { ArrowRight, BadgeCheck, Coins, LineChart } from "lucide-react";
+import { ArrowRight, Coins, LineChart, Users } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { SiteShell } from "@/components/site-shell";
 import { PartnerBar } from "@/components/partner-bar";
