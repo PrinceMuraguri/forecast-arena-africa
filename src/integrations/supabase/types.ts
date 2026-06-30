@@ -423,10 +423,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      recompute_market_probabilities: {
-        Args: { _market_id: string }
-        Returns: undefined
-      }
+      [_ in never]: never
     }
     Enums: {
       app_role: "admin" | "moderator" | "user" | "sponsor" | "partner"
