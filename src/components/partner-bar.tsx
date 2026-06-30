@@ -1,4 +1,31 @@
 import { cn } from "@/lib/utils";
+import econsultAsset from "@/assets/econsult-africa-logo.png.asset.json";
+import tkwsAsset from "@/assets/kenyan-wallstreet-logo.jpg.asset.json";
+
+const ECONSULT_LOGO = econsultAsset.url;
+const TKWS_LOGO = tkwsAsset.url;
+
+function EconsultMark({ className }: { className?: string }) {
+  return (
+    <img
+      src={ECONSULT_LOGO}
+      alt="Econsult Africa"
+      className={cn("inline-block h-4 w-auto align-[-3px]", className)}
+      loading="lazy"
+    />
+  );
+}
+
+function TkwsMark({ className }: { className?: string }) {
+  return (
+    <img
+      src={TKWS_LOGO}
+      alt="The Kenyan Wall Street"
+      className={cn("inline-block h-4 w-4 rounded-full align-[-3px]", className)}
+      loading="lazy"
+    />
+  );
+}
 
 type Variant = "footer" | "poll" | "cobranded" | "partners" | "chip";
 
