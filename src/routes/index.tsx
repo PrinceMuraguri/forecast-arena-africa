@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
-import { ArrowRight, BadgeCheck, Coins, LineChart } from "lucide-react";
+import { ArrowRight, Coins, LineChart, Users } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { SiteShell } from "@/components/site-shell";
 import { PartnerBar } from "@/components/partner-bar";
@@ -17,13 +17,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Share what you think. Predict what's next. Get paid for both. Powered by Econsult Africa.",
+          "Share what you think. Predict what's next. Get paid in real time. Powered by Econsult Africa.",
       },
       { property: "og:title", content: "Forecast Arena — Africa's Polls & Predictions Platform" },
       {
         property: "og:description",
         content:
-          "Take surveys for instant rewards. Forecast outcomes that move the continent — and earn when you call it right.",
+          "Take surveys for instant rewards. Forecast outcomes that move real markets — and earn when you call it right.",
       },
     ],
   }),
@@ -99,7 +99,7 @@ function Index() {
               className="mt-4 font-display text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl"
             >
               Share what you think. Predict what's next.{" "}
-              <span className="text-arena-coral">Get paid for both.</span>
+              <span className="text-arena-coral">Get paid in real time.</span>
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -108,9 +108,8 @@ function Index() {
               className="mt-5 max-w-xl text-lg text-white/75"
             >
               Answer surveys for instant rewards. Forecast the outcomes that
-              move the continent — prices, elections, markets, brands — and
-              earn when you call it right. Every question designed and verified
-              by independent research from Econsult Africa.
+              move real markets — prices, elections, markets, brands — and
+              earn when you call it right.
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -188,7 +187,7 @@ function Index() {
           <EarnCard
             icon={<Coins className="h-5 w-5 text-forecast-gold" />}
             title="Take surveys, get paid."
-            body="Share your view on the things shaping Africa — money, brands, work, daily life. Finish a survey and a cash reward lands instantly. No catch: the sponsor funds it, you earn from it."
+            body="Share your view on the things shaping Africa — money, brands, work, daily life. Finish a survey and a cash reward lands instantly."
             cta={["Browse surveys", "/arena"]}
           />
           <EarnCard
@@ -237,24 +236,28 @@ function Index() {
         </div>
       </section>
 
-      {/* CREDIBLE BY DESIGN */}
+      {/* JOIN THE PANEL */}
       <section className="mx-auto max-w-7xl px-4 py-20">
-        <h2 className="font-display text-3xl font-bold md:text-4xl">
-          Credible by design.
-        </h2>
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
-          <TrustCard
-            title="Independent research."
-            body="Every number is designed and stood behind by Econsult Africa, an independent economics research firm. Citable, defensible, real."
-          />
-          <TrustCard
-            title="Verified outcomes."
-            body="Every prediction resolves against an official public source — central banks, statistics bureaus, regulators. No ambiguity about who won."
-          />
-          <TrustCard
-            title="Not gambling."
-            body="On sponsored polls you risk nothing. Rewards come from sponsors. This is paid research participation — the model behind YouGov and Prolific — brought to Africa."
-          />
+        <div className="rounded-2xl border border-border bg-card p-8 md:p-12">
+          <div className="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
+            <div>
+              <span className="inline-flex items-center gap-2 rounded-full bg-signal-blue/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-signal-blue">
+                <Users className="h-3.5 w-3.5" />
+                Join the panel
+              </span>
+              <h2 className="mt-4 font-display text-2xl font-bold md:text-3xl">
+                A community of pollstars across Africa.
+              </h2>
+              <p className="mt-2 max-w-2xl text-muted-foreground">
+                Join a growing panel of forecasters and opinion-shapers from
+                Nairobi to Lagos, Accra to Johannesburg. Share your view,
+                sharpen your foresight, and get paid for both.
+              </p>
+            </div>
+            <Button asChild size="lg" className="shrink-0 bg-arena-coral text-white hover:bg-arena-coral/90">
+              <Link to="/signup">Start earning</Link>
+            </Button>
+          </div>
         </div>
       </section>
 
@@ -331,12 +334,3 @@ function Step({ n, title, children }: { n: string; title: string; children: Reac
   );
 }
 
-function TrustCard({ title, body }: { title: string; body: string }) {
-  return (
-    <div className="rounded-2xl border border-border bg-card p-6">
-      <BadgeCheck className="h-5 w-5 text-signal-blue" />
-      <h3 className="mt-3 font-display text-lg font-semibold">{title}</h3>
-      <p className="mt-2 text-sm text-muted-foreground">{body}</p>
-    </div>
-  );
-}

@@ -10,12 +10,12 @@ export const Route = createFileRoute("/for-sponsors")({
       {
         name: "description",
         content:
-          "Don't just advertise to Africa. Learn from it. Sponsor a poll and get three assets from one budget: research, content, and brand experience.",
+          "Go beyond advertising. Learn from your audience. Sponsor a poll and get three assets from one budget: research, content, and brand experience.",
       },
       { property: "og:title", content: "For Sponsors — Forecast Arena" },
       {
         property: "og:description",
-        content: "Don't just advertise to Africa. Learn from it.",
+        content: "Go beyond advertising. Learn from your audience.",
       },
     ],
   }),
@@ -54,7 +54,7 @@ function ForSponsorsPage() {
     <SiteShell>
       <PageHero
         eyebrow="For Sponsors & Partners"
-        title="Don't just advertise to Africa. Learn from it."
+        title="Go beyond advertising. Learn from your audience."
         subtitle="Sponsor a poll and get three assets from a single budget: rigorous market research, a published content series across a leading newsroom, and your brand on an experience people actually enjoy."
       />
 
