@@ -90,24 +90,15 @@ export const adminResolveMarket = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertAdmin(context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    // Call via authenticated client so auth.uid() is set inside the function.
-    const { error } = await context.supabase.rpc("resolve_market" as never, {
+    const { error } = await supabaseAdmin.rpc("resolve_market" as never, {
       p_market_id: data.marketId,
       p_winning_outcome_id: data.winningOutcomeId,
       p_resolution_notes: data.notes,
     } as never);
-    // Functions live in app_private; expose via wrapper.
-    if (error) {
-      // Fallback: invoke through admin client using raw SQL via rpc not available cross-schema.
-      // We instead call the admin client which bypasses RLS but has no auth.uid(); resolve_market
-      // checks role via has_role — so use admin client to set is_winning + status + credits manually
-      // is too risky here. Re-throw.
-      throw new Error(error.message);
-    }
-    // Touch the admin import to ensure it's bundled server-side (no-op).
-    void supabaseAdmin;
+    if (error) throw new Error(error.message);
     return { ok: true };
   });
+
 
 export type AdminPayout = {
   id: string;
