@@ -11,7 +11,9 @@ import {
 } from "recharts";
 import { SiteShell } from "@/components/site-shell";
 import { PageHero } from "@/components/page-hero";
+import { NonLiveCountryBanner } from "@/components/country-selector";
 import { PartnerBar } from "@/components/partner-bar";
+
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth-stub";
 import {
@@ -153,11 +155,13 @@ function InsightsPage() {
 
   return (
     <SiteShell>
+      <NonLiveCountryBanner countryCode={search.country} />
       <PageHero
         eyebrow="Insights"
         title="What Africa is thinking. And what comes next."
         subtitle="Articles, live indexes, rankings, and reports — from the polls you help create."
       />
+
 
       {/* Search + country */}
       <section className="mx-auto max-w-6xl px-4 py-8">
