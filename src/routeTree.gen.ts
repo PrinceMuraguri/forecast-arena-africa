@@ -19,6 +19,7 @@ import { Route as InsightsRouteImport } from './routes/insights'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as ForSponsorsRouteImport } from './routes/for-sponsors'
+import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as ArenaRouteImport } from './routes/arena'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
@@ -80,6 +81,11 @@ const ForSponsorsRoute = ForSponsorsRouteImport.update({
   path: '/for-sponsors',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ExploreRoute = ExploreRouteImport.update({
+  id: '/explore',
+  path: '/explore',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ArenaRoute = ArenaRouteImport.update({
   id: '/arena',
   path: '/arena',
@@ -134,6 +140,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/arena': typeof ArenaRouteWithChildren
+  '/explore': typeof ExploreRoute
   '/for-sponsors': typeof ForSponsorsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/how-it-works': typeof HowItWorksRoute
@@ -155,6 +162,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/arena': typeof ArenaRouteWithChildren
+  '/explore': typeof ExploreRoute
   '/for-sponsors': typeof ForSponsorsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/how-it-works': typeof HowItWorksRoute
@@ -178,6 +186,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/arena': typeof ArenaRouteWithChildren
+  '/explore': typeof ExploreRoute
   '/for-sponsors': typeof ForSponsorsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/how-it-works': typeof HowItWorksRoute
@@ -201,6 +210,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/arena'
+    | '/explore'
     | '/for-sponsors'
     | '/forgot-password'
     | '/how-it-works'
@@ -222,6 +232,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/arena'
+    | '/explore'
     | '/for-sponsors'
     | '/forgot-password'
     | '/how-it-works'
@@ -244,6 +255,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/about'
     | '/arena'
+    | '/explore'
     | '/for-sponsors'
     | '/forgot-password'
     | '/how-it-works'
@@ -267,6 +279,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   ArenaRoute: typeof ArenaRouteWithChildren
+  ExploreRoute: typeof ExploreRoute
   ForSponsorsRoute: typeof ForSponsorsRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   HowItWorksRoute: typeof HowItWorksRoute
@@ -349,6 +362,13 @@ declare module '@tanstack/react-router' {
       path: '/for-sponsors'
       fullPath: '/for-sponsors'
       preLoaderRoute: typeof ForSponsorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/explore': {
+      id: '/explore'
+      path: '/explore'
+      fullPath: '/explore'
+      preLoaderRoute: typeof ExploreRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/arena': {
@@ -468,6 +488,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   ArenaRoute: ArenaRouteWithChildren,
+  ExploreRoute: ExploreRoute,
   ForSponsorsRoute: ForSponsorsRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   HowItWorksRoute: HowItWorksRoute,

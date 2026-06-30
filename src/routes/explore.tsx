@@ -74,7 +74,7 @@ function ExplorePage() {
   const [qDraft, setQDraft] = useState(search.q ?? "");
 
   function update(patch: Partial<typeof search>) {
-    navigate({ search: (prev) => ({ ...prev, ...patch }) });
+    navigate({ search: (prev: any) => ({ ...prev, ...patch }) });
   }
 
   const grouped = !search.category && !search.country && !search.kind && !search.q;
