@@ -248,6 +248,39 @@ export type Database = {
         }
         Relationships: []
       }
+      payout_requests: {
+        Row: {
+          admin_notes: string | null
+          amount_kes: number
+          created_at: string
+          id: string
+          mpesa_phone: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          amount_kes: number
+          created_at?: string
+          id?: string
+          mpesa_phone: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          amount_kes?: number
+          created_at?: string
+          id?: string
+          mpesa_phone?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       polls: {
         Row: {
           category_id: string | null
@@ -417,6 +450,47 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      wallet_transactions: {
+        Row: {
+          amount_kes: number
+          created_at: string
+          id: string
+          kind: string
+          market_id: string | null
+          memo: string | null
+          payout_request_id: string | null
+          user_id: string
+        }
+        Insert: {
+          amount_kes: number
+          created_at?: string
+          id?: string
+          kind: string
+          market_id?: string | null
+          memo?: string | null
+          payout_request_id?: string | null
+          user_id: string
+        }
+        Update: {
+          amount_kes?: number
+          created_at?: string
+          id?: string
+          kind?: string
+          market_id?: string | null
+          memo?: string | null
+          payout_request_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wallet_transactions_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
