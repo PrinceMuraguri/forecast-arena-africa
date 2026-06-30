@@ -24,6 +24,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as InsightsSlugRouteImport } from './routes/insights.$slug'
 import { Route as ArenaSlugRouteImport } from './routes/arena.$slug'
 import { Route as AuthenticatedWalletRouteImport } from './routes/_authenticated/wallet'
+import { Route as AuthenticatedSponsorRouteImport } from './routes/_authenticated/sponsor'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
@@ -101,6 +102,11 @@ const AuthenticatedWalletRoute = AuthenticatedWalletRouteImport.update({
   path: '/wallet',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedSponsorRoute = AuthenticatedSponsorRouteImport.update({
+  id: '/sponsor',
+  path: '/sponsor',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -126,6 +132,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/sponsor': typeof AuthenticatedSponsorRoute
   '/wallet': typeof AuthenticatedWalletRoute
   '/arena/$slug': typeof ArenaSlugRoute
   '/insights/$slug': typeof InsightsSlugRoute
@@ -144,6 +151,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/sponsor': typeof AuthenticatedSponsorRoute
   '/wallet': typeof AuthenticatedWalletRoute
   '/arena/$slug': typeof ArenaSlugRoute
   '/insights/$slug': typeof InsightsSlugRoute
@@ -164,6 +172,7 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/sponsor': typeof AuthenticatedSponsorRoute
   '/_authenticated/wallet': typeof AuthenticatedWalletRoute
   '/arena/$slug': typeof ArenaSlugRoute
   '/insights/$slug': typeof InsightsSlugRoute
@@ -184,6 +193,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/admin'
     | '/dashboard'
+    | '/sponsor'
     | '/wallet'
     | '/arena/$slug'
     | '/insights/$slug'
@@ -202,6 +212,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/admin'
     | '/dashboard'
+    | '/sponsor'
     | '/wallet'
     | '/arena/$slug'
     | '/insights/$slug'
@@ -221,6 +232,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
+    | '/_authenticated/sponsor'
     | '/_authenticated/wallet'
     | '/arena/$slug'
     | '/insights/$slug'
@@ -348,6 +360,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedWalletRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/sponsor': {
+      id: '/_authenticated/sponsor'
+      path: '/sponsor'
+      fullPath: '/sponsor'
+      preLoaderRoute: typeof AuthenticatedSponsorRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -368,12 +387,14 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedSponsorRoute: typeof AuthenticatedSponsorRoute
   AuthenticatedWalletRoute: typeof AuthenticatedWalletRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedSponsorRoute: AuthenticatedSponsorRoute,
   AuthenticatedWalletRoute: AuthenticatedWalletRoute,
 }
 

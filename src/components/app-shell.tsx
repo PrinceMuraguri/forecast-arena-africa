@@ -1,12 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { Wallet, LogOut, User, Shield } from "lucide-react";
+import { Wallet, LogOut, User, Shield, Building2 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { PartnerBar } from "@/components/partner-bar";
 import { PageTransition } from "@/components/page-transition";
 import { useAuth } from "@/lib/auth-stub";
 import { adminCheck } from "@/lib/admin.functions";
+import { getMySponsorOrgs } from "@/lib/sponsor.functions";
 
 /**
  * The dark/electric "arena world" shell, for the logged-in app surface.
@@ -21,6 +22,13 @@ export function AppShell({ children }: { children: ReactNode }) {
     enabled: isAuthenticated,
     staleTime: 60_000,
   });
+  const { data: sponsorOrgs } = useQuery({
+    queryKey: ["my-sponsor-orgs"],
+    queryFn: () => getMySponsorOrgs(),
+    enabled: isAuthenticated,
+    staleTime: 60_000,
+  });
+  const hasSponsorOrg = (sponsorOrgs?.length ?? 0) > 0;
 
   return (
     <div className="arena-world flex min-h-screen flex-col bg-background text-foreground">
@@ -42,6 +50,11 @@ export function AppShell({ children }: { children: ReactNode }) {
             {admin?.isAdmin && (
               <Link to="/admin" className="inline-flex items-center gap-1 text-forecast-gold hover:text-forecast-gold/80">
                 <Shield className="h-3.5 w-3.5" /> Admin
+              </Link>
+            )}
+            {hasSponsorOrg && (
+              <Link to="/sponsor" className="inline-flex items-center gap-1 text-live-cyan hover:text-live-cyan/80">
+                <Building2 className="h-3.5 w-3.5" /> Sponsor
               </Link>
             )}
           </nav>

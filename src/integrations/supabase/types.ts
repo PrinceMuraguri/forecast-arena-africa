@@ -127,6 +127,7 @@ export type Database = {
           slug: string
           sponsor_logo_url: string | null
           sponsor_name: string | null
+          sponsor_org_id: string | null
           status: Database["public"]["Enums"]["market_status"]
           summary: string | null
           title: string
@@ -146,6 +147,7 @@ export type Database = {
           slug: string
           sponsor_logo_url?: string | null
           sponsor_name?: string | null
+          sponsor_org_id?: string | null
           status?: Database["public"]["Enums"]["market_status"]
           summary?: string | null
           title: string
@@ -165,6 +167,7 @@ export type Database = {
           slug?: string
           sponsor_logo_url?: string | null
           sponsor_name?: string | null
+          sponsor_org_id?: string | null
           status?: Database["public"]["Enums"]["market_status"]
           summary?: string | null
           title?: string
@@ -176,6 +179,13 @@ export type Database = {
             columns: ["category_id"]
             isOneToOne: false
             referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "markets_sponsor_org_id_fkey"
+            columns: ["sponsor_org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]

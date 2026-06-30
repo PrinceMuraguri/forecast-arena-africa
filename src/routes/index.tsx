@@ -1,11 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { ArrowRight, BadgeCheck, Coins, LineChart } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { SiteShell } from "@/components/site-shell";
 import { PartnerBar } from "@/components/partner-bar";
 import { ProbabilityOrb } from "@/components/probability-orb";
 import { LiveTicker, type TickerItem } from "@/components/live-ticker";
 import { Button } from "@/components/ui/button";
+import { listArenaMarkets } from "@/lib/arena.functions";
+import { listFeatureFlags } from "@/lib/feature-flags.functions";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -27,7 +30,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const TICKER: TickerItem[] = [
+const FALLBACK_TICKER: TickerItem[] = [
   { id: "1", title: "Will CBK cut the rate in November?", probability: 62, prizePoolKes: 250000, closesIn: "3d 4h" },
   { id: "2", title: "Will fuel prices rise next EPRA review?", probability: 71, prizePoolKes: 180000, closesIn: "1d 9h" },
   { id: "3", title: "Will Safaricom beat earnings?", probability: 54, prizePoolKes: 320000, closesIn: "6d 2h" },
@@ -35,7 +38,45 @@ const TICKER: TickerItem[] = [
   { id: "5", title: "Will Stanbic PMI cross 50?", probability: 49, prizePoolKes: 95000, closesIn: "2d 0h" },
 ];
 
+function formatCloses(iso: string | null) {
+  if (!iso) return "Open";
+  const ms = new Date(iso).getTime() - Date.now();
+  if (ms <= 0) return "Closed";
+  const days = Math.floor(ms / 86_400_000);
+  const hours = Math.floor((ms % 86_400_000) / 3_600_000);
+  return `${days}d ${hours}h`;
+}
+
 function Index() {
+  const flagsQuery = useQuery({
+    queryKey: ["feature-flags"],
+    queryFn: () => listFeatureFlags(),
+    staleTime: 5 * 60_000,
+  });
+  const liveEnabled =
+    flagsQuery.data?.find((f) => f.key === "arena_live_markets")?.enabled ?? false;
+
+  const marketsQuery = useQuery({
+    queryKey: ["home-arena-markets"],
+    queryFn: () => listArenaMarkets(),
+    enabled: liveEnabled,
+    staleTime: 60_000,
+  });
+
+  const liveItems: TickerItem[] =
+    liveEnabled && marketsQuery.data?.length
+      ? marketsQuery.data.slice(0, 8).map((m) => {
+          const yes = m.outcomes.find((o) => /yes/i.test(o.label)) ?? m.outcomes[0];
+          return {
+            id: m.id,
+            title: m.title,
+            probability: Math.round(Number(yes?.implied_probability ?? 0) * 100),
+            prizePoolKes: Number(m.prize_pool_kes ?? 0),
+            closesIn: formatCloses(m.closes_at),
+          };
+        })
+      : FALLBACK_TICKER;
+
   return (
     <SiteShell>
       {/* HERO */}
@@ -128,7 +169,7 @@ function Index() {
           </div>
         </div>
 
-        <LiveTicker items={TICKER} />
+        <LiveTicker items={liveItems} />
       </section>
 
       {/* PARTNER BAR */}
