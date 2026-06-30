@@ -26,10 +26,11 @@ export function useResolutionToasts() {
           filter: `user_id=eq.${user.id}`,
         },
         (payload) => {
-          const row = payload.new as { id: string; is_resolved: boolean; reward_kes?: number | null };
-          if (!row?.is_resolved || seen.current.has(row.id)) return;
+          const row = payload.new as { id: string; is_resolved: boolean; points_awarded?: number | null };
+          const prev = payload.old as { is_resolved?: boolean } | null;
+          if (!row?.is_resolved || prev?.is_resolved || seen.current.has(row.id)) return;
           seen.current.add(row.id);
-          const reward = Number(row.reward_kes ?? 0);
+          const reward = Number(row.points_awarded ?? 0);
           if (reward > 0) {
             toast.success(`You were right! +KES ${reward.toLocaleString("en-KE")}`);
           } else {
