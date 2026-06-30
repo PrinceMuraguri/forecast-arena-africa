@@ -434,7 +434,7 @@ function Index() {
                         </p>
                       </div>
                     </div>
-                  </Link>
+                  </a>
                 );
               },
             )}
