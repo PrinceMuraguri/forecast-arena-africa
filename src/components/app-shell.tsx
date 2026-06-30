@@ -1,10 +1,12 @@
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { Wallet, LogOut, User } from "lucide-react";
+import { Wallet, LogOut, User, Shield } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { PartnerBar } from "@/components/partner-bar";
 import { PageTransition } from "@/components/page-transition";
 import { useAuth } from "@/lib/auth-stub";
+import { adminCheck } from "@/lib/admin.functions";
 
 /**
  * The dark/electric "arena world" shell, for the logged-in app surface.
@@ -13,6 +15,12 @@ import { useAuth } from "@/lib/auth-stub";
 export function AppShell({ children }: { children: ReactNode }) {
   const { isAuthenticated, signOut } = useAuth();
   const walletKes = 1240; // Wallet integration arrives in a later phase.
+  const { data: admin } = useQuery({
+    queryKey: ["admin-check"],
+    queryFn: () => adminCheck(),
+    enabled: isAuthenticated,
+    staleTime: 60_000,
+  });
 
   return (
     <div className="arena-world flex min-h-screen flex-col bg-background text-foreground">
@@ -31,6 +39,11 @@ export function AppShell({ children }: { children: ReactNode }) {
             <Link to="/dashboard" className="hover:text-live-cyan">Dashboard</Link>
             <Link to="/arena" className="hover:text-live-cyan">The Arena</Link>
             <Link to="/insights" className="hover:text-live-cyan">Insights</Link>
+            {admin?.isAdmin && (
+              <Link to="/admin" className="inline-flex items-center gap-1 text-forecast-gold hover:text-forecast-gold/80">
+                <Shield className="h-3.5 w-3.5" /> Admin
+              </Link>
+            )}
           </nav>
 
           <div className="flex items-center gap-2">
