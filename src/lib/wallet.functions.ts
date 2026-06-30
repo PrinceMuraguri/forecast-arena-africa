@@ -27,7 +27,8 @@ export type WalletSnapshot = {
 };
 
 async function computeSnapshot(
-  supabase: ReturnType<typeof requireSupabaseAuth> extends never ? never : any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabase: any,
   userId: string,
 ): Promise<WalletSnapshot> {
   const [{ data: txs }, { data: payouts }] = await Promise.all([
