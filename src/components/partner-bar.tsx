@@ -57,7 +57,8 @@ export function PartnerBar({
           className,
         )}
       >
-        <span>
+        <span className="inline-flex items-center gap-1.5">
+          <EconsultMark />
           Powered by{" "}
           <a className="font-medium text-foreground hover:text-primary" href={ECONSULT_URL}>
             Econsult Africa
@@ -66,7 +67,8 @@ export function PartnerBar({
         {showTkws && (
           <>
             <span aria-hidden>·</span>
-            <span>
+            <span className="inline-flex items-center gap-1.5">
+              <TkwsMark />
               Official Media Partner:{" "}
               <a className="font-medium text-foreground hover:text-primary" href={TKWS_URL}>
                 The Kenyan Wall Street
