@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      categories: {
+        Row: {
+          color: string | null
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       feature_flags: {
         Row: {
           description: string | null
@@ -37,6 +70,115 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      market_outcomes: {
+        Row: {
+          created_at: string
+          id: string
+          implied_probability: number
+          is_winning: boolean | null
+          label: string
+          market_id: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          implied_probability?: number
+          is_winning?: boolean | null
+          label: string
+          market_id: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          implied_probability?: number
+          is_winning?: boolean | null
+          label?: string
+          market_id?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_outcomes_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      markets: {
+        Row: {
+          category_id: string | null
+          closes_at: string | null
+          created_at: string
+          id: string
+          opens_at: string | null
+          prize_pool_kes: number
+          question: string
+          resolution_notes: string | null
+          resolution_source: string | null
+          resolves_at: string | null
+          slug: string
+          sponsor_logo_url: string | null
+          sponsor_name: string | null
+          status: Database["public"]["Enums"]["market_status"]
+          summary: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category_id?: string | null
+          closes_at?: string | null
+          created_at?: string
+          id?: string
+          opens_at?: string | null
+          prize_pool_kes?: number
+          question: string
+          resolution_notes?: string | null
+          resolution_source?: string | null
+          resolves_at?: string | null
+          slug: string
+          sponsor_logo_url?: string | null
+          sponsor_name?: string | null
+          status?: Database["public"]["Enums"]["market_status"]
+          summary?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category_id?: string | null
+          closes_at?: string | null
+          created_at?: string
+          id?: string
+          opens_at?: string | null
+          prize_pool_kes?: number
+          question?: string
+          resolution_notes?: string | null
+          resolution_source?: string | null
+          resolves_at?: string | null
+          slug?: string
+          sponsor_logo_url?: string | null
+          sponsor_name?: string | null
+          status?: Database["public"]["Enums"]["market_status"]
+          summary?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "markets_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       organization_members: {
         Row: {
@@ -105,6 +247,116 @@ export type Database = {
           website?: string | null
         }
         Relationships: []
+      }
+      polls: {
+        Row: {
+          category_id: string | null
+          closes_at: string | null
+          created_at: string
+          id: string
+          opens_at: string | null
+          question: string
+          slug: string
+          sponsor_logo_url: string | null
+          sponsor_name: string | null
+          status: Database["public"]["Enums"]["poll_status"]
+          summary: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category_id?: string | null
+          closes_at?: string | null
+          created_at?: string
+          id?: string
+          opens_at?: string | null
+          question: string
+          slug: string
+          sponsor_logo_url?: string | null
+          sponsor_name?: string | null
+          status?: Database["public"]["Enums"]["poll_status"]
+          summary?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category_id?: string | null
+          closes_at?: string | null
+          created_at?: string
+          id?: string
+          opens_at?: string | null
+          question?: string
+          slug?: string
+          sponsor_logo_url?: string | null
+          sponsor_name?: string | null
+          status?: Database["public"]["Enums"]["poll_status"]
+          summary?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "polls_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      predictions: {
+        Row: {
+          confidence: number
+          created_at: string
+          id: string
+          is_resolved: boolean
+          market_id: string
+          outcome_id: string
+          points_awarded: number | null
+          stake: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          confidence: number
+          created_at?: string
+          id?: string
+          is_resolved?: boolean
+          market_id: string
+          outcome_id: string
+          points_awarded?: number | null
+          stake?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          confidence?: number
+          created_at?: string
+          id?: string
+          is_resolved?: boolean
+          market_id?: string
+          outcome_id?: string
+          points_awarded?: number | null
+          stake?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "predictions_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "predictions_outcome_id_fkey"
+            columns: ["outcome_id"]
+            isOneToOne: false
+            referencedRelation: "market_outcomes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -175,8 +427,10 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "user" | "sponsor" | "partner"
+      market_status: "draft" | "open" | "closed" | "resolved" | "void"
       org_kind: "sponsor" | "partner" | "media" | "internal"
       org_member_role: "owner" | "admin" | "editor" | "viewer"
+      poll_status: "draft" | "open" | "closed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -305,8 +559,10 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user", "sponsor", "partner"],
+      market_status: ["draft", "open", "closed", "resolved", "void"],
       org_kind: ["sponsor", "partner", "media", "internal"],
       org_member_role: ["owner", "admin", "editor", "viewer"],
+      poll_status: ["draft", "open", "closed"],
     },
   },
 } as const
