@@ -170,16 +170,27 @@ function MarketCard({ market }: { market: ArenaMarket }) {
       className="group block rounded-2xl border border-white/10 bg-card p-6 transition-colors hover:border-live-cyan/40"
     >
       <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="text-[10px] uppercase tracking-widest text-muted-foreground">
-            {market.sponsor_name ? `Sponsored · ${market.sponsor_name}` : market.category?.name ?? "Market"}
-          </p>
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2 text-[10px] uppercase tracking-widest">
+            {market.category ? (
+              <span className="rounded-full border border-white/15 px-2 py-0.5 text-muted-foreground">
+                {market.category.name}
+              </span>
+            ) : null}
+            {market.sponsor_name ? (
+              <span className="text-live-cyan">Sponsored · {market.sponsor_name}</span>
+            ) : null}
+          </div>
           <h3 className="mt-2 font-display text-lg font-semibold leading-snug group-hover:text-live-cyan">
             {market.title}
           </h3>
+          {market.summary ? (
+            <p className="mt-2 line-clamp-2 text-xs text-muted-foreground">{market.summary}</p>
+          ) : null}
         </div>
         <ProbabilityOrb probability={probability} size={88} />
       </div>
+
       <div className="mt-4 grid grid-cols-2 gap-2 text-xs">
         <div className="rounded-lg border border-white/10 bg-white/5 p-2">
           <div className="text-muted-foreground">Prize</div>
