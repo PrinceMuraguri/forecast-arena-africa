@@ -141,7 +141,7 @@ function PollPage() {
             </div>
           </div>
         ) : !user ? (
-          <SignInCta slug={slug} />
+          <SignInCta />
         ) : (
           <Questionnaire
             poll={poll}
