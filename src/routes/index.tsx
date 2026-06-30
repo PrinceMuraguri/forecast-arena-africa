@@ -405,11 +405,11 @@ function Index() {
                   ? Math.round(Number(yes.implied_probability ?? 0) * 100)
                   : m.probability ?? 50;
                 const pool = Number(m.prize_pool_kes ?? m.prizePoolKes ?? 0);
+                const href = m.slug ? `/arena/${m.slug}` : "/arena";
                 return (
-                  <Link
+                  <a
                     key={m.id}
-                    to={m.slug ? "/arena/$slug" : "/arena"}
-                    params={m.slug ? { slug: m.slug } : (undefined as any)}
+                    href={href}
                     className="group rounded-2xl border border-white/10 bg-white/5 p-5 transition hover:border-live-cyan/60 hover:bg-white/10"
                   >
                     <p className="text-[10px] uppercase tracking-widest text-white/55">
