@@ -14,8 +14,10 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as RewardsRouteImport } from './routes/rewards'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as RankingsRouteImport } from './routes/rankings'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as InsightsRouteImport } from './routes/insights'
+import { Route as IndexesRouteImport } from './routes/indexes'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as ForSponsorsRouteImport } from './routes/for-sponsors'
@@ -25,8 +27,10 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TakeSlugRouteImport } from './routes/take.$slug'
+import { Route as RankingsSlugRouteImport } from './routes/rankings.$slug'
 import { Route as PollsSlugRouteImport } from './routes/polls.$slug'
 import { Route as InsightsSlugRouteImport } from './routes/insights.$slug'
+import { Route as IndexesSlugRouteImport } from './routes/indexes.$slug'
 import { Route as ArenaSlugRouteImport } from './routes/arena.$slug'
 import { Route as AuthenticatedWalletRouteImport } from './routes/_authenticated/wallet'
 import { Route as AuthenticatedSponsorRouteImport } from './routes/_authenticated/sponsor'
@@ -58,6 +62,11 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RankingsRoute = RankingsRouteImport.update({
+  id: '/rankings',
+  path: '/rankings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -66,6 +75,11 @@ const LoginRoute = LoginRouteImport.update({
 const InsightsRoute = InsightsRouteImport.update({
   id: '/insights',
   path: '/insights',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndexesRoute = IndexesRouteImport.update({
+  id: '/indexes',
+  path: '/indexes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HowItWorksRoute = HowItWorksRouteImport.update({
@@ -112,6 +126,11 @@ const TakeSlugRoute = TakeSlugRouteImport.update({
   path: '/take/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RankingsSlugRoute = RankingsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => RankingsRoute,
+} as any)
 const PollsSlugRoute = PollsSlugRouteImport.update({
   id: '/polls/$slug',
   path: '/polls/$slug',
@@ -121,6 +140,11 @@ const InsightsSlugRoute = InsightsSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => InsightsRoute,
+} as any)
+const IndexesSlugRoute = IndexesSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => IndexesRoute,
 } as any)
 const ArenaSlugRoute = ArenaSlugRouteImport.update({
   id: '/$slug',
@@ -156,8 +180,10 @@ export interface FileRoutesByFullPath {
   '/for-sponsors': typeof ForSponsorsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/indexes': typeof IndexesRouteWithChildren
   '/insights': typeof InsightsRouteWithChildren
   '/login': typeof LoginRoute
+  '/rankings': typeof RankingsRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRoute
   '/robots.txt': typeof RobotsDottxtRoute
@@ -168,8 +194,10 @@ export interface FileRoutesByFullPath {
   '/sponsor': typeof AuthenticatedSponsorRoute
   '/wallet': typeof AuthenticatedWalletRoute
   '/arena/$slug': typeof ArenaSlugRoute
+  '/indexes/$slug': typeof IndexesSlugRoute
   '/insights/$slug': typeof InsightsSlugRoute
   '/polls/$slug': typeof PollsSlugRoute
+  '/rankings/$slug': typeof RankingsSlugRoute
   '/take/$slug': typeof TakeSlugRoute
 }
 export interface FileRoutesByTo {
@@ -180,8 +208,10 @@ export interface FileRoutesByTo {
   '/for-sponsors': typeof ForSponsorsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/indexes': typeof IndexesRouteWithChildren
   '/insights': typeof InsightsRouteWithChildren
   '/login': typeof LoginRoute
+  '/rankings': typeof RankingsRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRoute
   '/robots.txt': typeof RobotsDottxtRoute
@@ -192,8 +222,10 @@ export interface FileRoutesByTo {
   '/sponsor': typeof AuthenticatedSponsorRoute
   '/wallet': typeof AuthenticatedWalletRoute
   '/arena/$slug': typeof ArenaSlugRoute
+  '/indexes/$slug': typeof IndexesSlugRoute
   '/insights/$slug': typeof InsightsSlugRoute
   '/polls/$slug': typeof PollsSlugRoute
+  '/rankings/$slug': typeof RankingsSlugRoute
   '/take/$slug': typeof TakeSlugRoute
 }
 export interface FileRoutesById {
@@ -206,8 +238,10 @@ export interface FileRoutesById {
   '/for-sponsors': typeof ForSponsorsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/indexes': typeof IndexesRouteWithChildren
   '/insights': typeof InsightsRouteWithChildren
   '/login': typeof LoginRoute
+  '/rankings': typeof RankingsRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRoute
   '/robots.txt': typeof RobotsDottxtRoute
@@ -218,8 +252,10 @@ export interface FileRoutesById {
   '/_authenticated/sponsor': typeof AuthenticatedSponsorRoute
   '/_authenticated/wallet': typeof AuthenticatedWalletRoute
   '/arena/$slug': typeof ArenaSlugRoute
+  '/indexes/$slug': typeof IndexesSlugRoute
   '/insights/$slug': typeof InsightsSlugRoute
   '/polls/$slug': typeof PollsSlugRoute
+  '/rankings/$slug': typeof RankingsSlugRoute
   '/take/$slug': typeof TakeSlugRoute
 }
 export interface FileRouteTypes {
@@ -232,8 +268,10 @@ export interface FileRouteTypes {
     | '/for-sponsors'
     | '/forgot-password'
     | '/how-it-works'
+    | '/indexes'
     | '/insights'
     | '/login'
+    | '/rankings'
     | '/reset-password'
     | '/rewards'
     | '/robots.txt'
@@ -244,8 +282,10 @@ export interface FileRouteTypes {
     | '/sponsor'
     | '/wallet'
     | '/arena/$slug'
+    | '/indexes/$slug'
     | '/insights/$slug'
     | '/polls/$slug'
+    | '/rankings/$slug'
     | '/take/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -256,8 +296,10 @@ export interface FileRouteTypes {
     | '/for-sponsors'
     | '/forgot-password'
     | '/how-it-works'
+    | '/indexes'
     | '/insights'
     | '/login'
+    | '/rankings'
     | '/reset-password'
     | '/rewards'
     | '/robots.txt'
@@ -268,8 +310,10 @@ export interface FileRouteTypes {
     | '/sponsor'
     | '/wallet'
     | '/arena/$slug'
+    | '/indexes/$slug'
     | '/insights/$slug'
     | '/polls/$slug'
+    | '/rankings/$slug'
     | '/take/$slug'
   id:
     | '__root__'
@@ -281,8 +325,10 @@ export interface FileRouteTypes {
     | '/for-sponsors'
     | '/forgot-password'
     | '/how-it-works'
+    | '/indexes'
     | '/insights'
     | '/login'
+    | '/rankings'
     | '/reset-password'
     | '/rewards'
     | '/robots.txt'
@@ -293,8 +339,10 @@ export interface FileRouteTypes {
     | '/_authenticated/sponsor'
     | '/_authenticated/wallet'
     | '/arena/$slug'
+    | '/indexes/$slug'
     | '/insights/$slug'
     | '/polls/$slug'
+    | '/rankings/$slug'
     | '/take/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -307,8 +355,10 @@ export interface RootRouteChildren {
   ForSponsorsRoute: typeof ForSponsorsRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   HowItWorksRoute: typeof HowItWorksRoute
+  IndexesRoute: typeof IndexesRouteWithChildren
   InsightsRoute: typeof InsightsRouteWithChildren
   LoginRoute: typeof LoginRoute
+  RankingsRoute: typeof RankingsRouteWithChildren
   ResetPasswordRoute: typeof ResetPasswordRoute
   RewardsRoute: typeof RewardsRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
@@ -355,6 +405,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rankings': {
+      id: '/rankings'
+      path: '/rankings'
+      fullPath: '/rankings'
+      preLoaderRoute: typeof RankingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -367,6 +424,13 @@ declare module '@tanstack/react-router' {
       path: '/insights'
       fullPath: '/insights'
       preLoaderRoute: typeof InsightsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/indexes': {
+      id: '/indexes'
+      path: '/indexes'
+      fullPath: '/indexes'
+      preLoaderRoute: typeof IndexesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/how-it-works': {
@@ -432,6 +496,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TakeSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rankings/$slug': {
+      id: '/rankings/$slug'
+      path: '/$slug'
+      fullPath: '/rankings/$slug'
+      preLoaderRoute: typeof RankingsSlugRouteImport
+      parentRoute: typeof RankingsRoute
+    }
     '/polls/$slug': {
       id: '/polls/$slug'
       path: '/polls/$slug'
@@ -445,6 +516,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/insights/$slug'
       preLoaderRoute: typeof InsightsSlugRouteImport
       parentRoute: typeof InsightsRoute
+    }
+    '/indexes/$slug': {
+      id: '/indexes/$slug'
+      path: '/$slug'
+      fullPath: '/indexes/$slug'
+      preLoaderRoute: typeof IndexesSlugRouteImport
+      parentRoute: typeof IndexesRoute
     }
     '/arena/$slug': {
       id: '/arena/$slug'
@@ -511,6 +589,17 @@ const ArenaRouteChildren: ArenaRouteChildren = {
 
 const ArenaRouteWithChildren = ArenaRoute._addFileChildren(ArenaRouteChildren)
 
+interface IndexesRouteChildren {
+  IndexesSlugRoute: typeof IndexesSlugRoute
+}
+
+const IndexesRouteChildren: IndexesRouteChildren = {
+  IndexesSlugRoute: IndexesSlugRoute,
+}
+
+const IndexesRouteWithChildren =
+  IndexesRoute._addFileChildren(IndexesRouteChildren)
+
 interface InsightsRouteChildren {
   InsightsSlugRoute: typeof InsightsSlugRoute
 }
@@ -523,6 +612,18 @@ const InsightsRouteWithChildren = InsightsRoute._addFileChildren(
   InsightsRouteChildren,
 )
 
+interface RankingsRouteChildren {
+  RankingsSlugRoute: typeof RankingsSlugRoute
+}
+
+const RankingsRouteChildren: RankingsRouteChildren = {
+  RankingsSlugRoute: RankingsSlugRoute,
+}
+
+const RankingsRouteWithChildren = RankingsRoute._addFileChildren(
+  RankingsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
@@ -532,8 +633,10 @@ const rootRouteChildren: RootRouteChildren = {
   ForSponsorsRoute: ForSponsorsRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   HowItWorksRoute: HowItWorksRoute,
+  IndexesRoute: IndexesRouteWithChildren,
   InsightsRoute: InsightsRouteWithChildren,
   LoginRoute: LoginRoute,
+  RankingsRoute: RankingsRouteWithChildren,
   ResetPasswordRoute: ResetPasswordRoute,
   RewardsRoute: RewardsRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,

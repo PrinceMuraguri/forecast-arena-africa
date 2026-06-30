@@ -97,7 +97,7 @@ function RankingDetail() {
             {r.category && (
               <span
                 className="rounded-full px-2 py-0.5 font-medium"
-                style={{ background: `${r.category.color}20`, color: r.category.color }}
+                style={{ background: `${r.category.color ?? "#888"}20`, color: r.category.color ?? "#888" }}
               >
                 {r.category.icon} {r.category.name}
               </span>

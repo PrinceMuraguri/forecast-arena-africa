@@ -104,7 +104,7 @@ function IndexDetail() {
             {idx.category && (
               <span
                 className="rounded-full px-2 py-0.5 font-medium"
-                style={{ background: `${idx.category.color}20`, color: idx.category.color }}
+                style={{ background: `${idx.category.color ?? "#888"}20`, color: idx.category.color ?? "#888" }}
               >
                 {idx.category.icon} {idx.category.name}
               </span>
