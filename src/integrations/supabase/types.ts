@@ -281,6 +281,172 @@ export type Database = {
         }
         Relationships: []
       }
+      poll_answers: {
+        Row: {
+          created_at: string
+          id: string
+          option_id: string | null
+          question_id: string
+          response_id: string
+          value_numeric: number | null
+          value_text: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          option_id?: string | null
+          question_id: string
+          response_id: string
+          value_numeric?: number | null
+          value_text?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          option_id?: string | null
+          question_id?: string
+          response_id?: string
+          value_numeric?: number | null
+          value_text?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "poll_answers_option_id_fkey"
+            columns: ["option_id"]
+            isOneToOne: false
+            referencedRelation: "poll_question_options"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "poll_answers_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "poll_questions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "poll_answers_response_id_fkey"
+            columns: ["response_id"]
+            isOneToOne: false
+            referencedRelation: "poll_responses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      poll_question_options: {
+        Row: {
+          created_at: string
+          id: string
+          label: string
+          question_id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          label: string
+          question_id: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          label?: string
+          question_id?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "poll_question_options_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "poll_questions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      poll_questions: {
+        Row: {
+          created_at: string
+          id: string
+          kind: Database["public"]["Enums"]["poll_question_kind"]
+          poll_id: string
+          prompt: string
+          required: boolean
+          scale_max: number | null
+          scale_min: number | null
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kind?: Database["public"]["Enums"]["poll_question_kind"]
+          poll_id: string
+          prompt: string
+          required?: boolean
+          scale_max?: number | null
+          scale_min?: number | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kind?: Database["public"]["Enums"]["poll_question_kind"]
+          poll_id?: string
+          prompt?: string
+          required?: boolean
+          scale_max?: number | null
+          scale_min?: number | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "poll_questions_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "polls"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      poll_responses: {
+        Row: {
+          completed_at: string
+          created_at: string
+          id: string
+          poll_id: string
+          reward_kes: number
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string
+          created_at?: string
+          id?: string
+          poll_id: string
+          reward_kes?: number
+          user_id: string
+        }
+        Update: {
+          completed_at?: string
+          created_at?: string
+          id?: string
+          poll_id?: string
+          reward_kes?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "poll_responses_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "polls"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       polls: {
         Row: {
           category_id: string | null
@@ -289,6 +455,7 @@ export type Database = {
           id: string
           opens_at: string | null
           question: string
+          reward_kes: number
           slug: string
           sponsor_logo_url: string | null
           sponsor_name: string | null
@@ -304,6 +471,7 @@ export type Database = {
           id?: string
           opens_at?: string | null
           question: string
+          reward_kes?: number
           slug: string
           sponsor_logo_url?: string | null
           sponsor_name?: string | null
@@ -319,6 +487,7 @@ export type Database = {
           id?: string
           opens_at?: string | null
           question?: string
+          reward_kes?: number
           slug?: string
           sponsor_logo_url?: string | null
           sponsor_name?: string | null
@@ -504,6 +673,7 @@ export type Database = {
       market_status: "draft" | "open" | "closed" | "resolved" | "void"
       org_kind: "sponsor" | "partner" | "media" | "internal"
       org_member_role: "owner" | "admin" | "editor" | "viewer"
+      poll_question_kind: "single" | "multi" | "scale" | "text"
       poll_status: "draft" | "open" | "closed"
     }
     CompositeTypes: {
@@ -636,6 +806,7 @@ export const Constants = {
       market_status: ["draft", "open", "closed", "resolved", "void"],
       org_kind: ["sponsor", "partner", "media", "internal"],
       org_member_role: ["owner", "admin", "editor", "viewer"],
+      poll_question_kind: ["single", "multi", "scale", "text"],
       poll_status: ["draft", "open", "closed"],
     },
   },
