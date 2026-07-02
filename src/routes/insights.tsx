@@ -158,7 +158,7 @@ function InsightsPage() {
       <NonLiveCountryBanner countryCode={search.country} />
       <PageHero
         eyebrow="Insights"
-        title="What Africa is thinking. And what comes next."
+        title="What people are thinking. And what comes next."
         subtitle="Articles, live indexes, rankings, and reports — from the polls you help create."
       />
 

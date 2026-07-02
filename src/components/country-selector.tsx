@@ -79,8 +79,8 @@ export function NonLiveCountryBanner({ countryCode }: { countryCode?: string }) 
   return (
     <div className="border-b border-amber-500/30 bg-amber-500/10">
       <div className="mx-auto max-w-5xl px-4 py-3 text-sm text-amber-800 dark:text-amber-300">
-        We're launching in <span className="font-semibold">{c.name}</span> soon —
-        meanwhile, here's what Kenya is saying.
+        Launching in <span className="font-semibold">{c.name}</span> soon. Here's what
+        Kenya is saying in the meantime.
       </div>
     </div>
   );

@@ -175,8 +175,8 @@ function Index() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="mt-5 max-w-xl text-lg text-white/75"
             >
-              Read the articles, follow the live indexes, see what Africa rates and ranks
-              — then take part in the polls and prediction markets shaping the next move.
+              Read the insights, explore the polls, track the indexes. Then take part and
+              get paid for your view.
             </motion.p>
 
             <motion.form
