@@ -109,8 +109,8 @@ function PollDetailPage() {
               <Button asChild className="bg-arena-coral hover:bg-arena-coral/90">
                 <Link to="/signup">Sign in to take part & earn</Link>
               </Button>
-              <span className="text-xs uppercase tracking-widest text-muted-foreground">
-                Free · pays to M-Pesa
+              <span className="text-xs text-muted-foreground">
+                It's free, and you get paid to M-Pesa.
               </span>
             </div>
           )}
