@@ -39,9 +39,6 @@ export function SiteShell({ children }: { children: ReactNode }) {
             <span className="font-display text-xl font-bold tracking-tight">
               Forecast Arena
             </span>
-            <span className="hidden text-[10px] uppercase tracking-widest text-muted-foreground lg:inline">
-              Powered by Econsult Africa
-            </span>
           </Link>
 
           {!isAuthenticated && (
