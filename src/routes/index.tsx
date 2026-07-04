@@ -158,7 +158,7 @@ function Index() {
             transition={{ duration: 0.4 }}
             className="text-xs font-semibold uppercase tracking-[0.28em] text-live-cyan"
           >
-            Africa's Polls & Predictions Platform
+            AFRICA'S FREE POLLS & PREDICTIONS PLATFORM
           </motion.p>
 
           <motion.h1
