@@ -52,7 +52,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Africa's polls & predictions platform. Browse articles, live indexes, rankings, reports and a daily question — then take part and earn.",
+          "Africa's free polls & predictions platform. Browse articles, live indexes, rankings, reports and a daily question — then take part and earn.",
       },
       {
         property: "og:title",
