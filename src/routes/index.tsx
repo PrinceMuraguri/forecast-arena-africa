@@ -12,7 +12,7 @@ import {
 import { useState } from "react";
 import { SiteShell } from "@/components/site-shell";
 import { PartnerBar } from "@/components/partner-bar";
-import { ProbabilityOrb } from "@/components/probability-orb";
+
 import { LiveTicker, type TickerItem } from "@/components/live-ticker";
 import { Button } from "@/components/ui/button";
 import { listArenaMarkets } from "@/lib/arena.functions";
