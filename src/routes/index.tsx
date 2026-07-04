@@ -150,109 +150,87 @@ function Index() {
       {/* HERO */}
       <section className="relative overflow-hidden bg-forecast-ink text-white">
         <div className="absolute inset-0 arena-mesh opacity-90" />
-        <div className="relative mx-auto grid max-w-7xl gap-12 px-4 py-20 md:grid-cols-12 md:py-24">
-          <div className="md:col-span-7">
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              className="text-xs font-semibold uppercase tracking-[0.25em] text-live-cyan"
-            >
-              Africa's Polls & Predictions Platform
-            </motion.p>
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.05 }}
-              className="mt-4 font-display text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl"
-            >
-              What people are thinking — and{" "}
-              <span className="text-arena-coral">what comes next.</span>
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="mt-5 max-w-xl text-lg text-white/75"
-            >
-              Read the insights, explore the polls, track the indexes. Then take part and
-              get paid for your view.
-            </motion.p>
+        <div className="pointer-events-none absolute -right-40 top-1/2 h-[520px] w-[520px] -translate-y-1/2 rounded-full bg-arena-coral/20 blur-3xl" />
+        <div className="relative mx-auto max-w-7xl px-4 py-24 md:py-32">
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="text-xs font-semibold uppercase tracking-[0.28em] text-live-cyan"
+          >
+            Africa's Polls & Predictions Platform
+          </motion.p>
 
-            <motion.form
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.15 }}
-              onSubmit={submitSearch}
-              className="mt-7 flex max-w-xl items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 backdrop-blur"
-            >
-              <Search className="h-4 w-4 text-white/60" />
-              <input
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                placeholder="Search insights, polls, indexes, rankings…"
-                className="min-w-0 flex-1 bg-transparent text-sm text-white placeholder:text-white/50 focus:outline-none"
-              />
-              <button
-                type="submit"
-                className="rounded-full bg-arena-coral px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-white hover:bg-arena-coral/90"
-              >
-                Search
-              </button>
-            </motion.form>
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, delay: 0.05 }}
+            className="mt-6 max-w-5xl font-display text-5xl font-bold leading-[1.02] tracking-tight md:text-7xl"
+          >
+            Share what you think. Predict what's next.{" "}
+            <span className="text-arena-coral">Get paid in real time.</span>
+          </motion.h1>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="mt-6 flex flex-wrap gap-3"
-            >
-              <Button asChild size="lg" className="bg-white text-forecast-ink hover:bg-white/90">
-                <Link to="/insights">
-                  Explore the insights <ArrowRight className="ml-1 h-4 w-4" />
-                </Link>
-              </Button>
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="border-white/30 bg-white/5 text-white hover:bg-white/10 hover:text-white"
-              >
-                <Link to="/signup">Join & earn</Link>
-              </Button>
-            </motion.div>
-            <p className="mt-4 text-xs text-white/55">
-              Free to browse · No signup needed to read · Paid to M-Pesa when you take part
-            </p>
-          </div>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="mt-6 max-w-2xl text-lg text-white/75 md:text-xl"
+          >
+            Answer surveys for instant rewards. Forecast the outcomes that move real
+            markets — prices, elections, markets, brands — and earn when you call it right.
+          </motion.p>
 
-          <div className="md:col-span-5">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.92 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.7, delay: 0.2 }}
-              className="relative mx-auto flex max-w-sm flex-col items-center gap-4 rounded-3xl glass-card p-8"
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.22 }}
+            className="mt-10 flex flex-wrap items-center gap-3"
+          >
+            <Button
+              asChild
+              size="lg"
+              className="bg-arena-coral text-white hover:bg-arena-coral/90"
             >
-              <ProbabilityOrb
-                probability={62}
-                size={220}
-                label="Will CBK cut the rate in November? Crowd says 62% Yes."
-              />
-              <div className="grid w-full grid-cols-2 gap-3 text-center">
-                <div className="rounded-lg border border-white/10 bg-white/5 p-3">
-                  <p className="text-[10px] uppercase tracking-widest text-white/60">Prize pool</p>
-                  <p className="font-mono-data text-lg text-forecast-gold">KES 250,000</p>
-                </div>
-                <div className="rounded-lg border border-white/10 bg-white/5 p-3">
-                  <p className="text-[10px] uppercase tracking-widest text-white/60">Closes in</p>
-                  <p className="font-mono-data text-lg text-live-cyan">3d 4h</p>
-                </div>
-              </div>
-              <p className="text-[10px] uppercase tracking-widest text-white/50">
-                Illustrative · sample data
-              </p>
-            </motion.div>
-          </div>
+              <Link to="/signup">
+                Start earning <ArrowRight className="ml-1 h-4 w-4" />
+              </Link>
+            </Button>
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="border-white/25 bg-white/5 text-white hover:bg-white/10 hover:text-white"
+            >
+              <Link to="/arena">Explore live predictions</Link>
+            </Button>
+          </motion.div>
+
+          <motion.form
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.28 }}
+            onSubmit={submitSearch}
+            className="mt-8 flex max-w-xl items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 backdrop-blur"
+          >
+            <Search className="h-4 w-4 text-white/60" />
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Search insights, polls, indexes, rankings…"
+              className="min-w-0 flex-1 bg-transparent text-sm text-white placeholder:text-white/50 focus:outline-none"
+            />
+            <button
+              type="submit"
+              className="rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-white hover:bg-white/20"
+            >
+              Search
+            </button>
+          </motion.form>
+
+          <p className="mt-6 text-xs text-white/60">
+            Free to join · Paid straight to M-Pesa · Your data, your choice
+          </p>
         </div>
 
         <LiveTicker items={liveItems} />
