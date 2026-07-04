@@ -248,7 +248,7 @@ function Index() {
         <SectionHeader
           eyebrow="Live now"
           title="What people are saying — right now."
-          tag="Updated continuously"
+          tag="\n"
         />
         <div className="mt-6 grid gap-5 lg:grid-cols-12">
           {featuredArticle ? (
