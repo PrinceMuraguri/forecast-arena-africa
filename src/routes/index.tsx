@@ -52,7 +52,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Africa's polls & predictions platform. Browse articles, live indexes, rankings, reports and a daily question — then take part and earn.",
+          "Africa's free polls & predictions platform. Browse articles, live indexes, rankings, reports and a daily question — then take part and earn.",
       },
       {
         property: "og:title",
@@ -158,7 +158,7 @@ function Index() {
             transition={{ duration: 0.4 }}
             className="text-xs font-semibold uppercase tracking-[0.28em] text-live-cyan"
           >
-            Africa's Polls & Predictions Platform
+            AFRICA'S FREE POLLS & PREDICTIONS PLATFORM
           </motion.p>
 
           <motion.h1
