@@ -229,7 +229,7 @@ function Index() {
           </motion.form>
 
           <p className="mt-6 text-xs text-white/60">
-            Free to join · Paid straight to M-Pesa · Your data, your choice
+            Free to join&nbsp; · Your data, your choice
           </p>
         </div>
 
