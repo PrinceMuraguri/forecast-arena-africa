@@ -78,12 +78,14 @@ export const Route = createFileRoute("/api/public/webhooks/paystack")({
                 break;
               }
 
-              const { error } = await supabaseAdmin.schema("app_private").rpc("record_deposit", {
-                p_user_id: userId,
-                p_amount_kes: amountKes,
-                p_provider_reference: ref,
-                p_channel: "mpesa",
-              });
+              const { error } = await (supabaseAdmin as any)
+                .schema("app_private")
+                .rpc("record_deposit", {
+                  p_user_id: userId,
+                  p_amount_kes: amountKes,
+                  p_provider_reference: ref,
+                  p_channel: "mpesa",
+                });
               if (error) console.error("[paystack] record_deposit failed", error);
               break;
             }
@@ -101,13 +103,15 @@ export const Route = createFileRoute("/api/public/webhooks/paystack")({
               if (!tx?.payout_request_id) break;
 
               const status = event.event === "transfer.success" ? "paid" : "failed";
-              const { error } = await supabaseAdmin.schema("app_private").rpc("finalize_payout", {
-                p_payout_id: tx.payout_request_id,
-                p_status: status,
-                p_provider_reference: ref,
-                p_failure_reason:
-                  status === "failed" ? event.data.gateway_response ?? event.event : null,
-              });
+              const { error } = await (supabaseAdmin as any)
+                .schema("app_private")
+                .rpc("finalize_payout", {
+                  p_payout_id: tx.payout_request_id,
+                  p_status: status,
+                  p_provider_reference: ref,
+                  p_failure_reason:
+                    status === "failed" ? event.data.gateway_response ?? event.event : null,
+                });
               if (error) console.error("[paystack] finalize_payout failed", error);
               break;
             }
