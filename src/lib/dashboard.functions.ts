@@ -31,7 +31,7 @@ export const getDashboard = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     const { supabase, userId } = context;
 
-    const [{ data: preds }, { data: txs }, { data: balRpc }] = await Promise.all([
+    const [{ data: preds }, { data: bal }] = await Promise.all([
       supabase
         .from("predictions")
         .select(
@@ -41,34 +41,19 @@ export const getDashboard = createServerFn({ method: "GET" })
         .order("created_at", { ascending: false })
         .limit(25),
       supabase
-        .from("wallet_transactions")
-        .select("amount_kes,kind")
-        .eq("user_id", userId),
-      supabase.rpc as never,
+        .from("wallet_balances")
+        .select("available_kes,lifetime_rewards_kes,lifetime_winnings_kes")
+        .eq("user_id", userId)
+        .maybeSingle(),
     ]);
 
-    // Compute balance via direct sum (RPC in app_private not exposed via PostgREST).
-    let balance = 0;
-    let earned = 0;
-    for (const t of txs ?? []) {
-      const amt = Number(t.amount_kes);
-      if (t.kind === "payout") balance -= amt;
-      else balance += amt;
-      if (t.kind === "reward" || t.kind === "bonus") earned += amt;
-    }
-    // Subtract pending/approved payouts (available balance).
-    const { data: pending } = await supabase
-      .from("payout_requests")
-      .select("amount_kes,status")
-      .eq("user_id", userId)
-      .in("status", ["pending", "approved"]);
-    for (const p of pending ?? []) balance -= Number(p.amount_kes);
+    const balance = Number(bal?.available_kes ?? 0);
+    const earned = Number(bal?.lifetime_rewards_kes ?? 0) + Number(bal?.lifetime_winnings_kes ?? 0);
 
     const rows = (preds ?? []) as unknown as DashboardPredictionRow[];
     const resolved = rows.filter((r) => r.is_resolved && r.outcome);
     const correct = resolved.filter((r) => r.outcome?.is_winning === true).length;
     const accuracy = resolved.length ? (correct / resolved.length) * 100 : null;
-    // Brier: mean of (confidence/100 - outcomeWon)^2 across resolved
     const brier = resolved.length
       ? resolved.reduce((acc, r) => {
           const p = (r.confidence ?? 50) / 100;
@@ -81,7 +66,6 @@ export const getDashboard = createServerFn({ method: "GET" })
       (r) => !r.is_resolved && r.market?.status === "open",
     ).length;
 
-    void balRpc;
     const stats: DashboardStats = {
       balanceKes: Math.round(balance * 100) / 100,
       openForecasts: open,
@@ -94,3 +78,4 @@ export const getDashboard = createServerFn({ method: "GET" })
 
     return { stats, recent: rows };
   });
+
