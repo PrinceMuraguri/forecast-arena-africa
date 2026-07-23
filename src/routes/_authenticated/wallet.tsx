@@ -88,8 +88,10 @@ function WalletPage() {
         </div>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
-          <DepositPanel snapshot={data} />
+          <EarnExplainer />
           <WithdrawPanel snapshot={data} />
+
+
 
 
           <div className="rounded-2xl border border-white/10 bg-card p-6">
