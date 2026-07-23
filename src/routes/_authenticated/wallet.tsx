@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { getWallet, requestPayout } from "@/lib/wallet.functions";
+import { initiateMpesaDeposit } from "@/lib/paystack.functions";
 import { confirmMpesaVerification, normalizeKenyanPhone } from "@/lib/verification.functions";
 
 const walletQuery = () =>
@@ -87,7 +88,9 @@ function WalletPage() {
         </div>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
+          <DepositPanel snapshot={data} />
           <WithdrawPanel snapshot={data} />
+
 
           <div className="rounded-2xl border border-white/10 bg-card p-6">
             <h2 className="font-display text-lg font-semibold">Payout history</h2>
