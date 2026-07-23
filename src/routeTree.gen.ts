@@ -41,6 +41,7 @@ import { Route as AuthenticatedWalletRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedSponsorRouteImport } from './routes/_authenticated/sponsor'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as ApiPublicWebhooksPaystackRouteImport } from './routes/api/public/webhooks/paystack'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -201,6 +202,12 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiPublicWebhooksPaystackRoute =
+  ApiPublicWebhooksPaystackRouteImport.update({
+    id: '/api/public/webhooks/paystack',
+    path: '/api/public/webhooks/paystack',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -234,6 +241,7 @@ export interface FileRoutesByFullPath {
   '/rankings/$slug': typeof RankingsSlugRoute
   '/reports/$slug': typeof ReportsSlugRoute
   '/take/$slug': typeof TakeSlugRoute
+  '/api/public/webhooks/paystack': typeof ApiPublicWebhooksPaystackRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -267,6 +275,7 @@ export interface FileRoutesByTo {
   '/rankings/$slug': typeof RankingsSlugRoute
   '/reports/$slug': typeof ReportsSlugRoute
   '/take/$slug': typeof TakeSlugRoute
+  '/api/public/webhooks/paystack': typeof ApiPublicWebhooksPaystackRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -302,6 +311,7 @@ export interface FileRoutesById {
   '/rankings/$slug': typeof RankingsSlugRoute
   '/reports/$slug': typeof ReportsSlugRoute
   '/take/$slug': typeof TakeSlugRoute
+  '/api/public/webhooks/paystack': typeof ApiPublicWebhooksPaystackRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -337,6 +347,7 @@ export interface FileRouteTypes {
     | '/rankings/$slug'
     | '/reports/$slug'
     | '/take/$slug'
+    | '/api/public/webhooks/paystack'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -370,6 +381,7 @@ export interface FileRouteTypes {
     | '/rankings/$slug'
     | '/reports/$slug'
     | '/take/$slug'
+    | '/api/public/webhooks/paystack'
   id:
     | '__root__'
     | '/'
@@ -404,6 +416,7 @@ export interface FileRouteTypes {
     | '/rankings/$slug'
     | '/reports/$slug'
     | '/take/$slug'
+    | '/api/public/webhooks/paystack'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -429,6 +442,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   PollsSlugRoute: typeof PollsSlugRoute
   TakeSlugRoute: typeof TakeSlugRoute
+  ApiPublicWebhooksPaystackRoute: typeof ApiPublicWebhooksPaystackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -657,6 +671,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/webhooks/paystack': {
+      id: '/api/public/webhooks/paystack'
+      path: '/api/public/webhooks/paystack'
+      fullPath: '/api/public/webhooks/paystack'
+      preLoaderRoute: typeof ApiPublicWebhooksPaystackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -767,6 +788,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   PollsSlugRoute: PollsSlugRoute,
   TakeSlugRoute: TakeSlugRoute,
+  ApiPublicWebhooksPaystackRoute: ApiPublicWebhooksPaystackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
