@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { getWallet, requestPayout } from "@/lib/wallet.functions";
-import { initiateMpesaDeposit } from "@/lib/paystack.functions";
+
 import { confirmMpesaVerification, normalizeKenyanPhone } from "@/lib/verification.functions";
 
 const walletQuery = () =>
