@@ -17,6 +17,7 @@ import {
   adminSetPayoutStatus,
   adminCreateMarket,
 } from "@/lib/admin.functions";
+import { processPayoutBatch, sendMpesaPayout } from "@/lib/paystack.functions";
 import { listCategories } from "@/lib/arena.functions";
 
 export const Route = createFileRoute("/_authenticated/admin")({
