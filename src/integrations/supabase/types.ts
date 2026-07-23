@@ -1113,6 +1113,7 @@ export type Database = {
           mpesa_verified_at: string | null
           payouts_blocked: boolean
           payouts_blocked_reason: string | null
+          paystack_recipient_code: string | null
           persona: string | null
           phone: string | null
           region: string | null
@@ -1131,6 +1132,7 @@ export type Database = {
           mpesa_verified_at?: string | null
           payouts_blocked?: boolean
           payouts_blocked_reason?: string | null
+          paystack_recipient_code?: string | null
           persona?: string | null
           phone?: string | null
           region?: string | null
@@ -1149,6 +1151,7 @@ export type Database = {
           mpesa_verified_at?: string | null
           payouts_blocked?: boolean
           payouts_blocked_reason?: string | null
+          paystack_recipient_code?: string | null
           persona?: string | null
           phone?: string | null
           region?: string | null
@@ -1418,7 +1421,15 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      v_ledger_integrity: {
+        Row: {
+          cached_available: number | null
+          drift: number | null
+          ledger_sum: number | null
+          user_id: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       complete_survey_reward: {
