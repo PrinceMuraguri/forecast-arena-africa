@@ -183,16 +183,14 @@ export const submitPollResponse = createServerFn({ method: "POST" })
       if (aErr) throw new Error(aErr.message);
     }
 
-    // Credit wallet (admin client — wallet_transactions is admin-write only).
+    // Credit wallet via the safe ledger path.
     if (reward > 0) {
-      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-      await supabaseAdmin.from("wallet_transactions").insert({
-        user_id: userId,
-        amount_kes: reward,
-        kind: "reward",
-        memo: "Poll completed",
+      const { error: rErr2 } = await supabase.rpc("complete_survey_reward", {
+        p_response_id: response.id,
       });
+      if (rErr2) throw new Error(rErr2.message);
     }
+
 
     return { responseId: response.id, rewardKes: reward };
   });
