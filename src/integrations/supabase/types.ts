@@ -1425,30 +1425,12 @@ export type Database = {
         Args: { p_response_id: string }
         Returns: number
       }
-      finalize_payout: {
-        Args: {
-          p_failure_reason?: string
-          p_payout_id: string
-          p_provider_reference: string
-          p_status: string
-        }
-        Returns: undefined
-      }
       place_prediction: {
         Args: {
           p_confidence?: number
           p_market_id: string
           p_outcome_id: string
           p_stake_kes?: number
-        }
-        Returns: string
-      }
-      record_deposit: {
-        Args: {
-          p_amount_kes: number
-          p_channel?: string
-          p_provider_reference: string
-          p_user_id: string
         }
         Returns: string
       }
