@@ -17,6 +17,7 @@ import {
   adminSetPayoutStatus,
   adminCreateMarket,
 } from "@/lib/admin.functions";
+import { processPayoutBatch, sendMpesaPayout } from "@/lib/paystack.functions";
 import { listCategories } from "@/lib/arena.functions";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -138,50 +139,167 @@ function PayoutsPanel() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const sendOne = useMutation({
+    mutationFn: (payoutId: string) => sendMpesaPayout({ data: { payoutId } }),
+    onSuccess: () => {
+      toast.success("Transfer dispatched");
+      qc.invalidateQueries({ queryKey: ["admin", "payouts"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const batch = useMutation({
+    mutationFn: () => processPayoutBatch({ data: {} }),
+    onSuccess: (res: {
+      batchId: string;
+      attempted: number;
+      dispatched: number;
+      failed: number;
+    }) => {
+      toast.success(
+        `Batch ${res.batchId.slice(0, 8)}: ${res.dispatched}/${res.attempted} dispatched, ${res.failed} failed`,
+      );
+      qc.invalidateQueries({ queryKey: ["admin", "payouts"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   if (!data) return <div className="text-white/60">Loading…</div>;
 
+  const pending = data.filter((p) => p.status === "pending");
+  const pendingTotal = pending.reduce((s, p) => s + Number(p.amount_kes), 0);
+
+  // Group by batch_id for a lightweight batch-history view.
+  const batches = new Map<string, { count: number; total: number }>();
+  for (const p of data) {
+    const bid = (p as { batch_id?: string | null }).batch_id;
+    if (!bid) continue;
+    const cur = batches.get(bid) ?? { count: 0, total: 0 };
+    cur.count += 1;
+    cur.total += Number(p.amount_kes);
+    batches.set(bid, cur);
+  }
+
   return (
-    <div className="space-y-3">
-      {data.map((p) => (
-        <div key={p.id} className="rounded-lg border border-white/10 bg-white/5 p-4">
-          <div className="flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-medium text-white">
-                  {p.profile?.display_name ?? p.user_id.slice(0, 8)}
-                </span>
-                <Badge variant="outline" className="border-white/20 text-white/70">
-                  {p.status}
-                </Badge>
-              </div>
-              <p className="font-mono-data text-sm text-forecast-gold">
-                KES {p.amount_kes.toLocaleString()} → {p.mpesa_phone}
-              </p>
-              <p className="text-xs text-white/50">
-                {new Date(p.created_at).toLocaleString()}
-              </p>
-            </div>
-            <div className="flex flex-wrap items-center gap-2">
-              {(["approved", "paid", "rejected"] as const).map((s) => (
-                <Button
-                  key={s}
-                  size="sm"
-                  variant="outline"
-                  disabled={setStatus.isPending || p.status === s}
-                  onClick={() => setStatus.mutate({ payoutId: p.id, status: s })}
-                  className="border-white/20 bg-white/5 text-white hover:bg-white/10"
-                >
-                  Mark {s}
-                </Button>
-              ))}
-            </div>
-          </div>
+    <div className="space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-white/10 bg-white/5 p-4">
+        <div>
+          <p className="text-white">
+            <span className="font-semibold">{pending.length}</span> pending ·{" "}
+            <span className="font-mono-data text-forecast-gold">
+              KES {pendingTotal.toLocaleString()}
+            </span>
+          </p>
+          <p className="text-xs text-white/50">
+            Batch dispatch chunks in groups of 100 to Paystack. Only the webhook marks each as paid.
+          </p>
         </div>
-      ))}
-      {data.length === 0 && <div className="text-white/60">No payout requests yet.</div>}
+        <Button
+          disabled={batch.isPending || pending.length === 0}
+          onClick={() => {
+            if (
+              window.confirm(
+                `Dispatch ${pending.length} pending payouts totalling KES ${pendingTotal.toLocaleString()}?`,
+              )
+            ) {
+              batch.mutate();
+            }
+          }}
+        >
+          {batch.isPending ? "Dispatching…" : `Process all pending`}
+        </Button>
+      </div>
+
+      <div className="space-y-3">
+        {data.map((p) => {
+          const row = p as typeof p & {
+            batch_id?: string | null;
+            failure_reason?: string | null;
+            provider_reference?: string | null;
+            provider_status?: string | null;
+          };
+          return (
+            <div key={p.id} className="rounded-lg border border-white/10 bg-white/5 p-4">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-white">
+                      {p.profile?.display_name ?? p.user_id.slice(0, 8)}
+                    </span>
+                    <Badge variant="outline" className="border-white/20 text-white/70">
+                      {p.status}
+                    </Badge>
+                    {row.provider_status && (
+                      <Badge variant="outline" className="border-white/10 text-white/50">
+                        {row.provider_status}
+                      </Badge>
+                    )}
+                  </div>
+                  <p className="font-mono-data text-sm text-forecast-gold">
+                    KES {p.amount_kes.toLocaleString()} → {p.mpesa_phone}
+                  </p>
+                  <p className="text-xs text-white/50">
+                    {new Date(p.created_at).toLocaleString()}
+                    {row.provider_reference && ` · ${row.provider_reference}`}
+                  </p>
+                  {row.failure_reason && (
+                    <p className="mt-1 text-xs text-arena-coral">{row.failure_reason}</p>
+                  )}
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  {p.status === "pending" && (
+                    <Button
+                      size="sm"
+                      disabled={sendOne.isPending}
+                      onClick={() => sendOne.mutate(p.id)}
+                    >
+                      Send now
+                    </Button>
+                  )}
+                  {p.status !== "paid" && p.status !== "rejected" && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      disabled={setStatus.isPending}
+                      onClick={() =>
+                        setStatus.mutate({
+                          payoutId: p.id,
+                          status: "rejected",
+                          notes: "manually rejected",
+                        })
+                      }
+                      className="border-white/20 bg-white/5 text-white hover:bg-white/10"
+                    >
+                      Reject & refund
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+        {data.length === 0 && <div className="text-white/60">No payout requests yet.</div>}
+      </div>
+
+      {batches.size > 0 && (
+        <div className="rounded-lg border border-white/10 bg-white/5 p-4">
+          <h3 className="font-display text-sm font-semibold text-white">Batch history</h3>
+          <ul className="mt-2 divide-y divide-white/5 text-xs text-white/70">
+            {Array.from(batches.entries()).map(([bid, info]) => (
+              <li key={bid} className="flex items-center justify-between py-2">
+                <span className="font-mono-data">{bid.slice(0, 8)}</span>
+                <span>
+                  {info.count} · KES {info.total.toLocaleString()}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
+
 
 function CreateMarketPanel() {
   const qc = useQueryClient();

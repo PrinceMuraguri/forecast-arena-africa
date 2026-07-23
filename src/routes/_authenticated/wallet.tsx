@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { getWallet, requestPayout } from "@/lib/wallet.functions";
-import { initiateMpesaDeposit } from "@/lib/paystack.functions";
+
 import { confirmMpesaVerification, normalizeKenyanPhone } from "@/lib/verification.functions";
 
 const walletQuery = () =>
@@ -88,8 +88,10 @@ function WalletPage() {
         </div>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
-          <DepositPanel snapshot={data} />
+          <EarnExplainer />
           <WithdrawPanel snapshot={data} />
+
+
 
 
           <div className="rounded-2xl border border-white/10 bg-card p-6">
@@ -394,69 +396,21 @@ function Card({ label, value, accent }: { label: string; value: string; accent: 
   );
 }
 
-function DepositPanel({ snapshot }: { snapshot: Awaited<ReturnType<typeof getWallet>> }) {
-  const qc = useQueryClient();
-  const deposit = useServerFn(initiateMpesaDeposit);
-  const [amount, setAmount] = useState("");
-  const [phone, setPhone] = useState(snapshot.mpesaPhone ?? "");
-  const [pending, setPending] = useState<string | null>(null);
-
-  const mut = useMutation({
-    mutationFn: (vars: { amountKes: number; phone: string }) => deposit({ data: vars }),
-    onSuccess: (res) => {
-      setPending(res.reference);
-      toast.success(res.message);
-      setAmount("");
-      qc.invalidateQueries({ queryKey: ["wallet"] });
-    },
-    onError: (e: Error) => toast.error(e.message),
-  });
-
+function EarnExplainer() {
   return (
     <div className="rounded-2xl border border-white/10 bg-card p-6">
-      <h2 className="font-display text-lg font-semibold">Top up via M-Pesa</h2>
-      <p className="mt-1 text-sm text-muted-foreground">
-        Enter your M-Pesa number and amount. You'll receive an STK push on your phone.
+      <h2 className="font-display text-lg font-semibold">How you get paid</h2>
+      <p className="mt-2 text-sm text-muted-foreground">
+        Your balance comes from completed polls and correct predictions. Withdraw to
+        M-Pesa anytime — no deposits required.
       </p>
-      <div className="mt-4 grid gap-3">
-        <div>
-          <Label htmlFor="dep-phone">M-Pesa phone</Label>
-          <Input
-            id="dep-phone"
-            inputMode="tel"
-            placeholder="07XX XXX XXX"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-          />
-        </div>
-        <div>
-          <Label htmlFor="dep-amount">Amount (KES)</Label>
-          <Input
-            id="dep-amount"
-            inputMode="decimal"
-            placeholder="500"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-          />
-        </div>
-        <Button
-          className="mt-1"
-          disabled={mut.isPending || !amount || !phone}
-          onClick={() =>
-            mut.mutate({ amountKes: Number(amount), phone })
-          }
-        >
-          {mut.isPending ? "Sending prompt…" : "Send M-Pesa prompt"}
-        </Button>
-        {pending && (
-          <p className="text-xs text-muted-foreground">
-            Awaiting confirmation for reference{" "}
-            <span className="font-mono-data">{pending}</span>. Your balance updates
-            automatically once M-Pesa confirms.
-          </p>
-        )}
-      </div>
+      <ul className="mt-4 space-y-2 text-sm">
+        <li className="flex gap-2"><span className="text-forecast-gold">•</span> Finish a poll → completion reward credits instantly.</li>
+        <li className="flex gap-2"><span className="text-forecast-gold">•</span> Nail a prediction → your share of the prize pool lands when it resolves.</li>
+        <li className="flex gap-2"><span className="text-forecast-gold">•</span> Verify your M-Pesa number once, then cash out on demand.</li>
+      </ul>
     </div>
   );
 }
+
 

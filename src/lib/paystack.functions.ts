@@ -29,76 +29,51 @@ async function paystack<T = unknown>(path: string, init: RequestInit = {}): Prom
   return body.data as T;
 }
 
-/**
- * Initiate an M-Pesa STK push deposit via Paystack Charge API.
- * Returns the reference so the client can poll or await the webhook.
- */
-export const initiateMpesaDeposit = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((input: { amountKes: number; phone: string }) => {
-    const amount = Number(input?.amountKes);
-    if (!Number.isFinite(amount) || amount < 10) throw new Error("Minimum deposit is KES 10.");
-    if (amount > 150000) throw new Error("Maximum single deposit is KES 150,000.");
-    return { amountKes: Math.round(amount), phone: normalizeMpesaPhone(input.phone) };
-  })
-  .handler(async ({ data, context }) => {
-    const { userId, supabase } = context;
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("display_name")
-      .eq("id", userId)
-      .maybeSingle();
+// Resolve or create the Paystack transfer recipient for a user, caching the code
+// on profiles.paystack_recipient_code to avoid recreating it per payout.
+async function resolveRecipient(
+  supabaseAdmin: any,
+  userId: string,
+  mpesaPhone: string,
+): Promise<string> {
+  const phone = normalizeMpesaPhone(mpesaPhone);
+  const { data: profile } = await supabaseAdmin
+    .from("profiles")
+    .select("paystack_recipient_code")
+    .eq("id", userId)
+    .maybeSingle();
 
-    // Paystack account email (users identified by uuid; email optional)
-    const email = `user-${userId}@wallet.forecastarena.africa`;
-    const reference = `fa_dep_${userId.slice(0, 8)}_${Date.now()}`;
+  if (profile?.paystack_recipient_code) return profile.paystack_recipient_code as string;
 
-    const res = await paystack<{ reference: string; status: string; display_text?: string }>(
-      "/charge",
-      {
-        method: "POST",
-        body: JSON.stringify({
-          email,
-          amount: data.amountKes * 100, // Paystack expects kobo/cents
-          currency: "KES",
-          reference,
-          mobile_money: { phone: data.phone, provider: "mpesa" },
-          metadata: {
-            user_id: userId,
-            purpose: "deposit",
-            display_name: profile?.display_name ?? null,
-          },
-        }),
-      },
-    );
-
-    // Log a pending transaction row via admin so we can reconcile in the webhook.
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    await supabaseAdmin.from("payment_transactions").insert({
-      user_id: userId,
-      direction: "collection",
-      purpose: "deposit",
-      amount_kes: data.amountKes,
+  const recipient = await paystack<{ recipient_code: string }>("/transferrecipient", {
+    method: "POST",
+    body: JSON.stringify({
+      type: "mobile_money",
+      name: `Forecast Arena user ${userId.slice(0, 8)}`,
+      account_number: phone,
+      bank_code: "MPESA",
       currency: "KES",
-      provider: "paystack",
-      provider_reference: res.reference ?? reference,
-      provider_status: "pending",
-      channel: "mpesa",
-      mpesa_phone: data.phone,
-    });
-
-    return {
-      reference: res.reference ?? reference,
-      status: res.status,
-      message:
-        res.display_text ??
-        "Check your phone for the M-Pesa prompt and enter your PIN to complete the deposit.",
-    };
+    }),
   });
+  await supabaseAdmin
+    .from("profiles")
+    .update({ paystack_recipient_code: recipient.recipient_code })
+    .eq("id", userId);
+  return recipient.recipient_code;
+}
+
+async function assertAdmin(context: { supabase: any; userId: string }) {
+  const { data: adminRow } = await context.supabase
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", context.userId)
+    .eq("role", "admin")
+    .maybeSingle();
+  if (!adminRow) throw new Error("Forbidden");
+}
 
 /**
- * Admin-only: send a queued payout to M-Pesa via Paystack Transfer.
- * Called from the admin console after reviewing the request.
+ * Admin-only: send a single queued payout to M-Pesa via Paystack Transfer.
  */
 export const sendMpesaPayout = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -107,14 +82,7 @@ export const sendMpesaPayout = createServerFn({ method: "POST" })
     return { payoutId: String(input.payoutId) };
   })
   .handler(async ({ data, context }) => {
-    // Authorise: caller must be admin.
-    const { data: adminRow } = await context.supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", context.userId)
-      .eq("role", "admin")
-      .maybeSingle();
-    if (!adminRow) throw new Error("Forbidden");
+    await assertAdmin(context);
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: payout, error } = await supabaseAdmin
@@ -128,20 +96,8 @@ export const sendMpesaPayout = createServerFn({ method: "POST" })
     }
 
     const phone = normalizeMpesaPhone(payout.mpesa_phone);
+    const recipientCode = await resolveRecipient(supabaseAdmin, payout.user_id, phone);
 
-    // 1. Create recipient
-    const recipient = await paystack<{ recipient_code: string }>("/transferrecipient", {
-      method: "POST",
-      body: JSON.stringify({
-        type: "mobile_money",
-        name: `Forecast Arena user ${payout.user_id.slice(0, 8)}`,
-        account_number: phone,
-        bank_code: "MPESA",
-        currency: "KES",
-      }),
-    });
-
-    // 2. Initiate transfer
     const transferRef = `fa_pay_${payout.id.slice(0, 8)}_${Date.now()}`;
     const transfer = await paystack<{ reference: string; status: string }>("/transfer", {
       method: "POST",
@@ -149,7 +105,7 @@ export const sendMpesaPayout = createServerFn({ method: "POST" })
         source: "balance",
         amount: Math.round(Number(payout.amount_kes) * 100),
         currency: "KES",
-        recipient: recipient.recipient_code,
+        recipient: recipientCode,
         reference: transferRef,
         reason: "Forecast Arena payout",
       }),
@@ -166,14 +122,158 @@ export const sendMpesaPayout = createServerFn({ method: "POST" })
       provider_status: "processing",
       channel: "mpesa",
       mpesa_phone: phone,
-      recipient_code: recipient.recipient_code,
+      recipient_code: recipientCode,
       payout_request_id: payout.id,
     });
 
     await supabaseAdmin
       .from("payout_requests")
-      .update({ status: "processing" })
+      .update({ status: "approved" })
       .eq("id", payout.id);
 
     return { reference: transfer.reference, status: transfer.status };
+  });
+
+const CHUNK_SIZE = 100;
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/**
+ * Admin-only: dispatch a batch of pending payout requests to Paystack.
+ * - If payoutRequestIds is omitted, drains up to `limit` oldest pending requests.
+ * - Chunks into groups of 100 (Paystack's bulk-transfer limit).
+ * - Per-item failures are refunded via set_payout_status('rejected', reason) and
+ *   do not abort the batch.
+ * - Marks each dispatched request as 'approved'. The webhook is the only path
+ *   that moves a request to 'paid' (via finalize_payout -> settle_payout).
+ */
+export const processPayoutBatch = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { payoutRequestIds?: string[]; limit?: number } = {}) => ({
+    payoutRequestIds: Array.isArray(input.payoutRequestIds)
+      ? input.payoutRequestIds.map(String)
+      : undefined,
+    limit: Math.min(Math.max(Number(input.limit) || 100, 1), 500),
+  }))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    // 1. Load the target payout rows.
+    let query = supabaseAdmin
+      .from("payout_requests")
+      .select("id, user_id, amount_kes, mpesa_phone, status");
+
+    if (data.payoutRequestIds && data.payoutRequestIds.length) {
+      query = query.in("id", data.payoutRequestIds);
+    } else {
+      query = query
+        .eq("status", "pending")
+        .order("created_at", { ascending: true })
+        .limit(data.limit);
+    }
+
+    const { data: rows, error } = await query;
+    if (error) throw new Error(error.message);
+    const targets = (rows ?? []).filter(
+      (r) => r.status === "pending" || r.status === "approved",
+    );
+
+    const batchId = crypto.randomUUID();
+    const errors: Array<{ payoutId: string; message: string }> = [];
+    let dispatched = 0;
+
+    // 2. Process in chunks of 100 with a small delay between chunks.
+    for (let i = 0; i < targets.length; i += CHUNK_SIZE) {
+      const chunk = targets.slice(i, i + CHUNK_SIZE);
+
+      for (const payout of chunk) {
+        const transferRef = `fa_pay_${payout.id.slice(0, 8)}_${Date.now()}`;
+        try {
+          const phone = normalizeMpesaPhone(payout.mpesa_phone);
+          const recipientCode = await resolveRecipient(
+            supabaseAdmin,
+            payout.user_id,
+            phone,
+          );
+
+          // Log the intent BEFORE dispatch so nothing is untracked on crash.
+          await supabaseAdmin.from("payment_transactions").insert({
+            user_id: payout.user_id,
+            direction: "payout",
+            purpose: "withdrawal",
+            amount_kes: payout.amount_kes,
+            currency: "KES",
+            provider: "paystack",
+            provider_reference: transferRef,
+            provider_status: "processing",
+            channel: "mpesa",
+            mpesa_phone: phone,
+            recipient_code: recipientCode,
+            payout_request_id: payout.id,
+            batch_id: batchId,
+          });
+
+          const transfer = await paystack<{ reference: string; status: string }>(
+            "/transfer",
+            {
+              method: "POST",
+              body: JSON.stringify({
+                source: "balance",
+                amount: Math.round(Number(payout.amount_kes) * 100),
+                currency: "KES",
+                recipient: recipientCode,
+                reference: transferRef,
+                reason: "Forecast Arena payout",
+              }),
+            },
+          );
+
+          await supabaseAdmin
+            .from("payout_requests")
+            .update({ status: "approved" })
+            .eq("id", payout.id);
+
+          if (transfer.reference && transfer.reference !== transferRef) {
+            await supabaseAdmin
+              .from("payment_transactions")
+              .update({ provider_reference: transfer.reference })
+              .eq("provider_reference", transferRef);
+          }
+
+          dispatched += 1;
+        } catch (err) {
+          const message = err instanceof Error ? err.message : String(err);
+          errors.push({ payoutId: payout.id, message });
+
+          // Refund the reservation so funds return to available_kes.
+          try {
+            await supabaseAdmin.rpc("set_payout_status", {
+              p_payout_id: payout.id,
+              p_new_status: "rejected",
+              p_admin_notes: `batch dispatch failed: ${message.slice(0, 200)}`,
+            });
+          } catch (refundErr) {
+            console.error("[batch] refund failed", payout.id, refundErr);
+          }
+
+          await supabaseAdmin
+            .from("payment_transactions")
+            .update({
+              provider_status: "failed",
+              failure_reason: message.slice(0, 500),
+            })
+            .eq("provider_reference", transferRef);
+        }
+      }
+
+      if (i + CHUNK_SIZE < targets.length) await sleep(500);
+    }
+
+    return {
+      batchId,
+      attempted: targets.length,
+      dispatched,
+      failed: errors.length,
+      errors,
+    };
   });

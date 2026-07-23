@@ -4,12 +4,13 @@ import { createHmac, timingSafeEqual } from "crypto";
 /**
  * Paystack webhook handler.
  *
- * Paystack signs the raw request body with HMAC SHA-512 using your secret key
- * and sends the signature in the `x-paystack-signature` header. We verify that
- * signature before touching the ledger.
- *
- * Configure the webhook URL as:
- *   https://<your-domain>/api/public/webhooks/paystack
+ * Robustness rules:
+ *  - HMAC SHA-512 verification against the raw body (never parse first).
+ *  - Any unrecognised event / unknown reference / handler error logs and
+ *    returns 200. Paystack retries 5xx indefinitely and the Econsult fan-out
+ *    would amplify that.
+ *  - Foreign refs (not starting with `fa_`) are ignored — Econsult may forward
+ *    stray events during the fan-out window.
  */
 export const Route = createFileRoute("/api/public/webhooks/paystack")({
   server: {
@@ -42,65 +43,55 @@ export const Route = createFileRoute("/api/public/webhooks/paystack")({
         try {
           event = JSON.parse(raw);
         } catch {
-          return new Response("Bad JSON", { status: 400 });
+          // Never 5xx on bad JSON — Paystack would retry forever.
+          console.error("[paystack] bad JSON body");
+          return new Response("ok", { status: 200 });
         }
 
-        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+        const ref = event?.data?.reference ?? "";
+        // Ignore events that don't belong to Forecast Arena. The Econsult fan-out
+        // forwards by prefix, but stray events must never touch the ledger.
+        if (!ref.startsWith("fa_")) {
+          console.log("[paystack] ignoring foreign event", event.event, ref);
+          return new Response("ok", { status: 200 });
+        }
 
         try {
+          const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+          // Best-effort audit log on the transaction row (if it exists yet).
+          try {
+            await supabaseAdmin
+              .from("payment_transactions")
+              .update({
+                metadata: { last_event: event.event, at: new Date().toISOString() },
+              } as any)
+              .eq("provider_reference", ref);
+          } catch (logErr) {
+            console.error("[paystack] audit update failed", logErr);
+          }
+
           switch (event.event) {
             case "charge.success": {
-              const ref = event.data.reference;
-              if (!ref) break;
-
-              // Prefer the pending row we created at initiation; fall back to metadata.
-              const { data: pending } = await supabaseAdmin
-                .from("payment_transactions")
-                .select("user_id, amount_kes")
-                .eq("provider_reference", ref)
-                .maybeSingle();
-
-              let userId = pending?.user_id as string | undefined;
-              let amountKes = pending?.amount_kes ? Number(pending.amount_kes) : undefined;
-
-              if (!userId) {
-                const meta =
-                  typeof event.data.metadata === "string"
-                    ? (JSON.parse(event.data.metadata) as { user_id?: string })
-                    : event.data.metadata;
-                userId = meta?.user_id;
-              }
-              if (!amountKes && event.data.amount) {
-                amountKes = Number(event.data.amount) / 100;
-              }
-              if (!userId || !amountKes) {
-                console.error("[paystack] charge.success missing user/amount", ref);
-                break;
-              }
-
-              const { error } = await (supabaseAdmin as any)
-                .schema("app_private")
-                .rpc("record_deposit", {
-                  p_user_id: userId,
-                  p_amount_kes: amountKes,
-                  p_provider_reference: ref,
-                  p_channel: "mpesa",
-                });
-              if (error) console.error("[paystack] record_deposit failed", error);
+              // Deposits are dormant in the current product. Log and ack —
+              // do NOT touch the ledger. If/when staked markets ship, revive
+              // the record_deposit call here behind a feature flag.
+              console.log("[paystack] charge.success ignored (deposits disabled)", ref);
               break;
             }
 
             case "transfer.success":
             case "transfer.failed":
             case "transfer.reversed": {
-              const ref = event.data.reference;
-              if (!ref) break;
               const { data: tx } = await supabaseAdmin
                 .from("payment_transactions")
                 .select("payout_request_id")
                 .eq("provider_reference", ref)
                 .maybeSingle();
-              if (!tx?.payout_request_id) break;
+              if (!tx?.payout_request_id) {
+                console.warn("[paystack] transfer event with no matching tx row", ref);
+                break;
+              }
 
               const status = event.event === "transfer.success" ? "paid" : "failed";
               const { error } = await (supabaseAdmin as any)
@@ -117,12 +108,12 @@ export const Route = createFileRoute("/api/public/webhooks/paystack")({
             }
 
             default:
-              // Ignore other events; still ack so Paystack stops retrying.
+              console.log("[paystack] unhandled event", event.event, ref);
               break;
           }
         } catch (err) {
           console.error("[paystack] handler error", err);
-          // Return 200 anyway so Paystack doesn't retry a poison payload forever.
+          // Fall through to 200 so Paystack does not retry a poison payload.
         }
 
         return new Response("ok", { status: 200 });
