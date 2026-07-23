@@ -320,6 +320,48 @@ export type Database = {
           },
         ]
       }
+      ledger_entries: {
+        Row: {
+          amount_kes: number
+          created_at: string
+          created_by: string | null
+          currency: string
+          entry_type: Database["public"]["Enums"]["ledger_entry_type"]
+          id: string
+          idempotency_key: string | null
+          memo: string
+          source_id: string | null
+          source_type: string | null
+          user_id: string
+        }
+        Insert: {
+          amount_kes: number
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          entry_type: Database["public"]["Enums"]["ledger_entry_type"]
+          id?: string
+          idempotency_key?: string | null
+          memo: string
+          source_id?: string | null
+          source_type?: string | null
+          user_id: string
+        }
+        Update: {
+          amount_kes?: number
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          entry_type?: Database["public"]["Enums"]["ledger_entry_type"]
+          id?: string
+          idempotency_key?: string | null
+          memo?: string
+          source_id?: string | null
+          source_type?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       market_outcomes: {
         Row: {
           created_at: string
@@ -506,6 +548,87 @@ export type Database = {
           website?: string | null
         }
         Relationships: []
+      }
+      payment_transactions: {
+        Row: {
+          amount_kes: number
+          batch_id: string | null
+          channel: string | null
+          created_at: string
+          currency: string
+          direction: Database["public"]["Enums"]["payment_direction"]
+          failure_reason: string | null
+          id: string
+          ledger_entry_id: string | null
+          metadata: Json
+          mpesa_phone: string | null
+          payout_request_id: string | null
+          provider: string
+          provider_reference: string | null
+          provider_status: Database["public"]["Enums"]["payment_status"]
+          purpose: Database["public"]["Enums"]["payment_purpose"]
+          recipient_code: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          amount_kes: number
+          batch_id?: string | null
+          channel?: string | null
+          created_at?: string
+          currency?: string
+          direction: Database["public"]["Enums"]["payment_direction"]
+          failure_reason?: string | null
+          id?: string
+          ledger_entry_id?: string | null
+          metadata?: Json
+          mpesa_phone?: string | null
+          payout_request_id?: string | null
+          provider?: string
+          provider_reference?: string | null
+          provider_status?: Database["public"]["Enums"]["payment_status"]
+          purpose: Database["public"]["Enums"]["payment_purpose"]
+          recipient_code?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          amount_kes?: number
+          batch_id?: string | null
+          channel?: string | null
+          created_at?: string
+          currency?: string
+          direction?: Database["public"]["Enums"]["payment_direction"]
+          failure_reason?: string | null
+          id?: string
+          ledger_entry_id?: string | null
+          metadata?: Json
+          mpesa_phone?: string | null
+          payout_request_id?: string | null
+          provider?: string
+          provider_reference?: string | null
+          provider_status?: Database["public"]["Enums"]["payment_status"]
+          purpose?: Database["public"]["Enums"]["payment_purpose"]
+          recipient_code?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_transactions_ledger_entry_id_fkey"
+            columns: ["ledger_entry_id"]
+            isOneToOne: false
+            referencedRelation: "ledger_entries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_transactions_payout_request_id_fkey"
+            columns: ["payout_request_id"]
+            isOneToOne: false
+            referencedRelation: "payout_requests"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       payout_requests: {
         Row: {
@@ -909,14 +1032,87 @@ export type Database = {
           },
         ]
       }
+      prize_pools: {
+        Row: {
+          completion_budget_kes: number
+          created_at: string
+          disbursed_kes: number
+          funding_status: string
+          id: string
+          is_pass_through: boolean
+          market_id: string | null
+          notes: string | null
+          poll_id: string | null
+          prize_amount_kes: number
+          sponsor_org_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          completion_budget_kes?: number
+          created_at?: string
+          disbursed_kes?: number
+          funding_status?: string
+          id?: string
+          is_pass_through?: boolean
+          market_id?: string | null
+          notes?: string | null
+          poll_id?: string | null
+          prize_amount_kes?: number
+          sponsor_org_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          completion_budget_kes?: number
+          created_at?: string
+          disbursed_kes?: number
+          funding_status?: string
+          id?: string
+          is_pass_through?: boolean
+          market_id?: string | null
+          notes?: string | null
+          poll_id?: string | null
+          prize_amount_kes?: number
+          sponsor_org_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prize_pools_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "prize_pools_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "polls"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "prize_pools_sponsor_org_id_fkey"
+            columns: ["sponsor_org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
           country: string | null
           created_at: string
           display_name: string | null
+          email_verified_cached: boolean
           id: string
           locale: string | null
+          mpesa_phone: string | null
+          mpesa_phone_verified: boolean
+          mpesa_verified_at: string | null
+          payouts_blocked: boolean
+          payouts_blocked_reason: string | null
           persona: string | null
           phone: string | null
           region: string | null
@@ -927,8 +1123,14 @@ export type Database = {
           country?: string | null
           created_at?: string
           display_name?: string | null
+          email_verified_cached?: boolean
           id: string
           locale?: string | null
+          mpesa_phone?: string | null
+          mpesa_phone_verified?: boolean
+          mpesa_verified_at?: string | null
+          payouts_blocked?: boolean
+          payouts_blocked_reason?: string | null
           persona?: string | null
           phone?: string | null
           region?: string | null
@@ -939,8 +1141,14 @@ export type Database = {
           country?: string | null
           created_at?: string
           display_name?: string | null
+          email_verified_cached?: boolean
           id?: string
           locale?: string | null
+          mpesa_phone?: string | null
+          mpesa_phone_verified?: boolean
+          mpesa_verified_at?: string | null
+          payouts_blocked?: boolean
+          payouts_blocked_reason?: string | null
           persona?: string | null
           phone?: string | null
           region?: string | null
@@ -1137,6 +1345,36 @@ export type Database = {
         }
         Relationships: []
       }
+      wallet_balances: {
+        Row: {
+          available_kes: number
+          lifetime_rewards_kes: number
+          lifetime_winnings_kes: number
+          lifetime_withdrawn_kes: number
+          pending_payout_kes: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          available_kes?: number
+          lifetime_rewards_kes?: number
+          lifetime_winnings_kes?: number
+          lifetime_withdrawn_kes?: number
+          pending_payout_kes?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          available_kes?: number
+          lifetime_rewards_kes?: number
+          lifetime_winnings_kes?: number
+          lifetime_withdrawn_kes?: number
+          pending_payout_kes?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       wallet_transactions: {
         Row: {
           amount_kes: number
@@ -1183,6 +1421,20 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      complete_survey_reward: {
+        Args: { p_response_id: string }
+        Returns: number
+      }
+      place_prediction: {
+        Args: {
+          p_confidence?: number
+          p_market_id: string
+          p_outcome_id: string
+          p_stake_kes?: number
+        }
+        Returns: string
+      }
+      request_payout: { Args: { p_amount_kes: number }; Returns: string }
       resolve_market: {
         Args: {
           p_market_id: string
@@ -1202,9 +1454,32 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "user" | "sponsor" | "partner"
+      ledger_entry_type:
+        | "survey_reward"
+        | "prediction_winning"
+        | "referral_bonus"
+        | "deposit"
+        | "stake_debit"
+        | "stake_refund"
+        | "payout_debit"
+        | "payout_reversal"
+        | "adjustment"
       market_status: "draft" | "open" | "closed" | "resolved" | "void"
       org_kind: "sponsor" | "partner" | "media" | "internal"
       org_member_role: "owner" | "admin" | "editor" | "viewer"
+      payment_direction: "collection" | "payout"
+      payment_purpose:
+        | "deposit"
+        | "report_purchase"
+        | "subscription"
+        | "withdrawal"
+        | "prize_payout"
+      payment_status:
+        | "pending"
+        | "processing"
+        | "success"
+        | "failed"
+        | "reversed"
       poll_question_kind: "single" | "multi" | "scale" | "text"
       poll_status: "draft" | "open" | "closed"
     }
@@ -1335,9 +1610,35 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user", "sponsor", "partner"],
+      ledger_entry_type: [
+        "survey_reward",
+        "prediction_winning",
+        "referral_bonus",
+        "deposit",
+        "stake_debit",
+        "stake_refund",
+        "payout_debit",
+        "payout_reversal",
+        "adjustment",
+      ],
       market_status: ["draft", "open", "closed", "resolved", "void"],
       org_kind: ["sponsor", "partner", "media", "internal"],
       org_member_role: ["owner", "admin", "editor", "viewer"],
+      payment_direction: ["collection", "payout"],
+      payment_purpose: [
+        "deposit",
+        "report_purchase",
+        "subscription",
+        "withdrawal",
+        "prize_payout",
+      ],
+      payment_status: [
+        "pending",
+        "processing",
+        "success",
+        "failed",
+        "reversed",
+      ],
       poll_question_kind: ["single", "multi", "scale", "text"],
       poll_status: ["draft", "open", "closed"],
     },
