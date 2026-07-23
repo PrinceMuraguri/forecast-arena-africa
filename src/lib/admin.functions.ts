@@ -109,6 +109,10 @@ export type AdminPayout = {
   admin_notes: string | null;
   created_at: string;
   profile: { display_name: string | null } | null;
+  batch_id: string | null;
+  provider_reference: string | null;
+  provider_status: string | null;
+  failure_reason: string | null;
 };
 
 export const adminListPayouts = createServerFn({ method: "GET" })
@@ -125,12 +129,48 @@ export const adminListPayouts = createServerFn({ method: "GET" })
       .order("created_at", { ascending: false })
       .limit(100);
     if (error) throw new Error(error.message);
-    return (data ?? []).map((p) => ({
-      ...p,
-      amount_kes: Number(p.amount_kes ?? 0),
-      profile: Array.isArray(p.profile) ? (p.profile[0] ?? null) : (p.profile ?? null),
-    })) as AdminPayout[];
+    const rows = data ?? [];
+
+    // Fetch the most recent payment_transaction per payout for provider context.
+    const ids = rows.map((r) => r.id);
+    const txByPayout = new Map<
+      string,
+      { batch_id: string | null; provider_reference: string | null; provider_status: string | null; failure_reason: string | null }
+    >();
+    if (ids.length) {
+      const { data: txs } = await supabaseAdmin
+        .from("payment_transactions")
+        .select("payout_request_id,batch_id,provider_reference,provider_status,failure_reason,created_at")
+        .in("payout_request_id", ids)
+        .order("created_at", { ascending: false });
+      for (const t of txs ?? []) {
+        const pid = t.payout_request_id as string | null;
+        if (!pid || txByPayout.has(pid)) continue;
+        txByPayout.set(pid, {
+          batch_id: (t.batch_id as string | null) ?? null,
+          provider_reference: (t.provider_reference as string | null) ?? null,
+          provider_status: (t.provider_status as string | null) ?? null,
+          failure_reason: (t.failure_reason as string | null) ?? null,
+        });
+      }
+    }
+
+    return rows.map((p) => {
+      const tx = txByPayout.get(p.id) ?? {
+        batch_id: null,
+        provider_reference: null,
+        provider_status: null,
+        failure_reason: null,
+      };
+      return {
+        ...p,
+        amount_kes: Number(p.amount_kes ?? 0),
+        profile: Array.isArray(p.profile) ? (p.profile[0] ?? null) : (p.profile ?? null),
+        ...tx,
+      };
+    }) as AdminPayout[];
   });
+
 
 export const adminSetPayoutStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
